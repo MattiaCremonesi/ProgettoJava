@@ -8,9 +8,11 @@ public class Lista {
 	
 	ArrayList<Articolo> ContenitoreArticolo = new ArrayList();
 	
-	Lista (String nome, Articolo articolo) {
+	public Lista (String nome, Articolo articolo) {
 		this.nome = nome;
-		ContenitoreArticolo.add(articolo);
+		if (articolo == null) {			 
+			ContenitoreArticolo.add(articolo);
+		}
 	}
 	
 }
