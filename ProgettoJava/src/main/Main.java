@@ -29,7 +29,6 @@ public class Main {
 			if (interfacciaDaUsare == 2) {
 				int CreaVisualizzaLista = 0;
 				boolean ripeti = true;
-				ArrayList<Lista> archivioListe = new ArrayList<>();
 				
 				do {
 					System.out.println ("Premere [1] per creare una lista di articoli...");
@@ -37,7 +36,7 @@ public class Main {
 					CreaVisualizzaLista = scanner.nextInt();
 					String nomeCategoria = "";
 					String nomeLista = "";
-					Lista lista;
+					ListaDiArticoli listaDiArticoli;
 					
 					if (CreaVisualizzaLista == 1) { 
 						nomeCategoria = chiediInfCategoria (scanner); 
@@ -49,13 +48,97 @@ public class Main {
 														(String) listaInfArticoli.get(1)
 														);
 						nomeLista = chiediInfLista (scanner);
-						lista = new Lista (nomeLista, articolo);
-						archivioListe.add(lista);
+						GestioneListe.InserisciCategoria(categoria);
+					    GestioneListe.InserisciArticolo(articolo);
+					    GestioneListe.CreaLista(nomeLista, articolo);
+					    System.out.println ("Lista creata con successo");
 					}
 					else if (CreaVisualizzaLista == 2) {
-						for (Lista liste : archivioListe) {
-							System.out.println (liste);
-						}
+						int VisualizzaModifica;
+						int ripetiVisualizzaModifica = 1;
+						do {
+							System.out.println ("Premi [1] per visualizzare le tue liste...");
+							System.out.println ("Premi [2] per modificare le tue liste...");
+							System.out.println ("Premi [0] per tornare indietro...");
+							VisualizzaModifica = scanner.nextInt();
+							if (VisualizzaModifica == 1) {						
+								if (GestioneListe.listeArticoli.isEmpty()) {
+									System.out.println ("L'archivio delle liste è vuoto");
+								}
+								for (ListaDiArticoli liste : GestioneListe.listeArticoli.values()) {
+									System.out.println (liste.getListaNome());
+								}	
+							}
+							else if (VisualizzaModifica == 2) {
+								boolean ripetiModificaElimina = true;
+								do {
+									System.out.println ("Premi [1] per eliminare una lista...");
+									System.out.println ("Premi [2] per modificare un articolo o una categoria...");
+									System.out.println ("Premi [0] per tornare indietro...");
+									int eliminaModifica = scanner.nextInt();
+									if (eliminaModifica == 1) {
+										int eliminaOggetto;
+										System.out.println ("Premi [1] per eliminare una lista...");
+										System.out.println ("Premi [2] per eliminare una categoria...");
+										System.out.println ("Premi [3] per eliminare un articolo...");
+										System.out.println ("Premi [0] per tornare indietro...");
+										eliminaOggetto = scanner.nextInt();
+										if (eliminaOggetto == 1) {
+											try {
+												String nomeListaEliminare;
+												System.out.println ("Inserisci il nome della lista da eliminare...");
+												nomeListaEliminare = scanner.next();	 
+												if (GestioneListe.listeArticoli.containsKey(nomeListaEliminare)) {
+													GestioneListe.CancellaLista(nomeListaEliminare);
+												}
+												else {
+													System.out.println ("Nome della lista non trovato");
+												}
+											}
+											catch (InputMismatchException e) {
+												System.out.printf("%s", e);
+											}
+											catch (Exception e) {
+												System.out.printf ("%s", e);
+											}
+										}
+										else if (eliminaOggetto == 2) {
+											try {
+												String nome;
+												System.out.println ("Inserisci il nome della categoria da eliminare...");
+												nome = scanner.next();
+												boolean trovata = false;
+												for (Categoria c : GestioneListe.categorie) {
+													if (c.getNome().equalsIgnoreCase(nome)) {
+														GestioneListe.CancellaCategoria(c);
+														System.out.println ("Categoria cancellata");
+														trovata = true;
+														break;
+													}
+												}
+												if (trovata == false) {
+													System.out.println ("Categoria non trovata");
+												}
+											}
+											catch (InputMismatchException e) {
+												System.out.printf ("%s", e);
+											}
+											catch (Exception e) {
+												System.out.printf ("%s", e);
+											}
+										}
+									}
+								}
+								while (ripetiModificaElimina);
+							}
+							else if (VisualizzaModifica == 0) {
+								ripetiVisualizzaModifica = 0;
+							}
+							else {
+								System.out.println ("input sbagliato");
+							}
+						} 
+						while (ripetiVisualizzaModifica == 1);
 					}
 					
 				} 
@@ -67,6 +150,9 @@ public class Main {
 		} 
 		catch (Exception e) {
 			System.out.printf ("%s", e);
+		} 
+		finally {
+			scanner.close();
 		}
 	}
 	
@@ -75,9 +161,11 @@ public class Main {
 		try {			
 			System.out.println ("Inserisci la categoria dell'articolo da inserire nella lista: ");
 			nome = scanner.next();
-		} catch (InputMismatchException e) {
+		} 
+		catch (InputMismatchException e) {
 			System.out.println ("nome non valido");
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			System.out.printf ("%s", e);
 		}
 		return nome;
@@ -103,9 +191,11 @@ public class Main {
 			else {
 				lista.add(nota);
 			}
-		} catch (InputMismatchException e) {
+		} 
+		catch (InputMismatchException e) {
 			System.out.printf ("%s", e);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			System.out.printf ("s", e);
 		}
 		return lista;
