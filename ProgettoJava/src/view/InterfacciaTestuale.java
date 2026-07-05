@@ -170,7 +170,8 @@ public class InterfacciaTestuale {
 		String nota = scanner.nextLine();
 		if (nota.equalsIgnoreCase("n")) {
 			lista.add("");
-		} else {
+		} 
+		else {
 			lista.add(nota);
 		}
 		return lista;

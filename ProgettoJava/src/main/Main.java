@@ -1,7 +1,9 @@
 package main;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import view.InterfacciaTestuale;
+import model.*;
 
 public class Main {
 
@@ -23,11 +25,17 @@ public class Main {
                 System.out.println("Avvio da interfaccia grafica...");
             } 
             else {
-                System.out.println("Scelta non valida. Chiusura.");
+                throw new NumeroSbagliatoException ("Input iniziale non valido.");
             }
-        } catch (Exception e) {
+            
+        } 
+        catch (InputMismatchException e) {
+        	System.out.printf ("%s", e.getMessage());
+        }
+        catch (Exception e) {
             System.out.println("Input iniziale non valido.");
-        } finally {
+        } 
+        finally {
             scanner.close();
         }
     }
