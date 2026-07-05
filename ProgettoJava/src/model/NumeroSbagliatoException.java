@@ -1,5 +1,7 @@
 package model;
 
-public class NumeroSbagliatoException {
-
+public class NumeroSbagliatoException extends RuntimeException{
+	public NumeroSbagliatoException (String messaggio) {
+		super (messaggio);
+	}
 }

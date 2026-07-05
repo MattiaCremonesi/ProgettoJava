@@ -29,6 +29,9 @@ public class Main {
             }
             
         } 
+        catch (NumeroSbagliatoException e) {
+        	throw new NumeroSbagliatoException ("Numero in input sbagliato.");
+        }
         catch (InputMismatchException e) {
         	System.out.printf ("%s", e.getMessage());
         }
