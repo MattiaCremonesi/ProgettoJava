@@ -33,6 +33,18 @@ public class Articolo {
 		return this.categoria;
 	}
 	
+	public void setNota (String nota) {
+		this.nota = nota;
+	}
+	
+	public void setPrezzo (double prezzo) {
+		this.prezzo = prezzo;
+	}
+	
+	public void setNota (Categoria categoria) {
+		this.categoria = categoria;
+	}
+	
 }
 
 
