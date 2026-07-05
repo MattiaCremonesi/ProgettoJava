@@ -18,8 +18,8 @@ public class Main {
             
             if (scelta == 2) {
                 System.out.println("Avvio da terminale...");
-                InterfacciaTestuale cli = new InterfacciaTestuale();
-                cli.avvia(scanner);
+                InterfacciaTestuale view = new InterfacciaTestuale();
+                view.avvia(scanner);
             } 
             else if (scelta == 1) {
                 System.out.println("Avvio da interfaccia grafica...");
@@ -30,13 +30,13 @@ public class Main {
             
         } 
         catch (NumeroSbagliatoException e) {
-        	throw new NumeroSbagliatoException ("Numero in input sbagliato.");
+        	System.out.println("Numero sbagliato: " + e.getMessage());
         }
         catch (InputMismatchException e) {
-        	System.out.printf ("%s", e.getMessage());
+        	System.out.println("Errore: Devi inserire un numero intero, non lettere o simboli.");
         }
         catch (Exception e) {
-            System.out.println("Input iniziale non valido.");
+        	System.out.println("Errore di configurazione: " + e.getMessage());
         } 
         finally {
             scanner.close();
