@@ -20,4 +20,29 @@ public class Articolo {
 		}
 		else this.nota = nota;
 	}	
+
+	public String getNota() {
+		return this.nota;
+	}
+
+	public double getPrezzo() {
+		return this.prezzo;
+	}
+	
+	public Categoria getCategoria() {
+		return this.categoria;
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
