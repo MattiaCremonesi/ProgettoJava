@@ -2,8 +2,10 @@ package main;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import view.InterfacciaTestuale;
+
 import model.*;
+import model.exception.NumeroSbagliatoException;
+import ui.view.InterfacciaTestuale;
 
 public class Main {
 
@@ -14,20 +16,7 @@ public class Main {
         System.out.println("Premere [2] per usare terminale...");
         
         try {
-            int scelta = scanner.nextInt();
-            
-            if (scelta == 2) {
-                System.out.println("Avvio da terminale...");
-                InterfacciaTestuale view = new InterfacciaTestuale();
-                view.avvia(scanner);
-            } 
-            else if (scelta == 1) {
-                System.out.println("Avvio da interfaccia grafica...");
-            } 
-            else {
-                throw new NumeroSbagliatoException ("Input iniziale non valido.");
-            }
-            
+        	scelta (scanner);
         } 
         catch (NumeroSbagliatoException e) {
         	System.out.println("Numero sbagliato: " + e.getMessage());
@@ -42,4 +31,30 @@ public class Main {
             scanner.close();
         }
     }
+    
+    static void scelta (Scanner scanner) throws NumeroSbagliatoException {
+    	
+    	int scelta = scanner.nextInt();
+        
+        if (scelta == 2) {
+            System.out.println("Avvio da terminale...");
+            InterfacciaTestuale view = new InterfacciaTestuale();
+            view.avvia(scanner);
+        } 
+        else if (scelta == 1) {
+            System.out.println("Avvio da interfaccia grafica...");
+        } 
+        else {
+            throw new NumeroSbagliatoException ("Input iniziale non valido.");
+        }
+    }
+    
 }
+
+
+
+
+
+
+
+
