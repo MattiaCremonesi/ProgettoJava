@@ -9,6 +9,7 @@ import model.exception.NumeroSbagliatoException;
 public class InterfacciaTestuale {
 
 	public void avvia(Scanner scanner) {
+		
 		boolean ripeti = true;
 		
 		do {
@@ -38,6 +39,7 @@ public class InterfacciaTestuale {
 	
 	
 	static boolean MenuPrincipale (Scanner scanner) throws NumeroSbagliatoException {
+		
 		int CreaVisualizzaLista = scanner.nextInt();
 		scanner.nextLine();
 		
@@ -84,6 +86,7 @@ public class InterfacciaTestuale {
 	
 	
 	static boolean gestioneListe (Scanner scanner) throws NumeroSbagliatoException {
+		
 		int VisualizzaModifica = scanner.nextInt();
 		scanner.nextLine();
 		
@@ -123,6 +126,7 @@ public class InterfacciaTestuale {
 	
 	
 	static boolean modificaCancellazione (Scanner scanner) throws NumeroSbagliatoException {
+		
 		int eliminaModifica = scanner.nextInt();
 		scanner.nextLine();
 		
@@ -165,10 +169,33 @@ public class InterfacciaTestuale {
 	
 	
 	static boolean modifica (Scanner scanner) throws NumeroSbagliatoException {
-		System.out.println ("Inserisci la nota dell'articolo da modificare: ");
+		int cosaModificare = scanner.nextInt();
 		scanner.nextLine();
-		ArrayList<String> nota_art = chiediNotaArticolo (scanner);
+		System.out.println ("Inserisci la nota dell'articolo da modificare: ");
+		String notaCercata = scanner.nextLine();
 		
+		Articolo articoloTrovato = null;
+	    for (Articolo a : GestioneListe.articoli) {
+	        if (a.getNota().equalsIgnoreCase(notaCercata)) {
+	            articoloTrovato = a;
+	            break;
+	        }
+	    }
+	    
+	    if (cosaModificare == 1) {
+	    	System.out.println ("Inserisci il prezzo da modificare: ");
+	    	double prezzo = chiediPrezzo (scanner);
+	    	articoloTrovato.setPrezzo(prezzo);
+	    	System.out.println ("Prezzo modificato: " + articoloTrovato.getPrezzo());
+	    }
+	    else if (cosaModificare == 2) {
+	    	String categoria = chiediInfCategoria (scanner);
+	    }
+	    else if (cosaModificare == 0) {
+	    	
+	    }
+	    else if (cosaModificare < 0 || cosaModificare > 2)
+	    	throw new NumeroSbagliatoException ("Input non valido.");
 		return true;
 	}
 	
@@ -176,8 +203,8 @@ public class InterfacciaTestuale {
 	
 	
 	
-	
 	static boolean cancellazione (Scanner scanner) throws NumeroSbagliatoException {
+		
 		int eliminaOggetto = scanner.nextInt();
 		scanner.nextLine();
 		
@@ -236,8 +263,9 @@ public class InterfacciaTestuale {
 	
 
 	static String chiediInfCategoria(Scanner scanner) {
+		
 		String nome = "";
-		System.out.println("Inserisci la categoria dell'articolo da inserire nella lista: ");
+		System.out.println("Inserisci il nome della categoria: ");
 		nome = scanner.nextLine();
 		return nome;
 	}
@@ -247,6 +275,7 @@ public class InterfacciaTestuale {
 	
 	
 	static ArrayList<Object> chiediInfArticolo(Scanner scanner) throws NumeroSbagliatoException {
+		
 		ArrayList<Object> lista = new ArrayList<>();
 		System.out.println("Inserisci il prezzo dell'articolo...");
 		double prezzo = chiediPrezzo (scanner);
@@ -268,6 +297,7 @@ public class InterfacciaTestuale {
 	
 	
 	static String chiediInfLista(Scanner scanner) {
+		
 		String nome = "";
 		System.out.println("Inserisci il nome della lista...");
 		nome = scanner.nextLine();
@@ -279,6 +309,7 @@ public class InterfacciaTestuale {
 
 	
 	static double chiediPrezzo (Scanner scanner) throws NumeroSbagliatoException {
+		
 		double prezzo = scanner.nextDouble();
 		if (prezzo < 0) {
 			throw new NumeroSbagliatoException ("prezzo non valido.");
@@ -291,6 +322,7 @@ public class InterfacciaTestuale {
 	
 	
 	static ArrayList<String> chiediNotaArticolo (Scanner scanner) {
+		
 		ArrayList<String> arrayNoteTrovate = new ArrayList<>();
 		String stringaNota = scanner.next();
 		for (Articolo a : GestioneListe.articoli) {
