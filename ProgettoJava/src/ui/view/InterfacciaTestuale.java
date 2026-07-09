@@ -276,8 +276,7 @@ public class InterfacciaTestuale {
 		else if (eliminaOggetto < 0 || eliminaOggetto > 3) {
 			throw new NumeroSbagliatoException ("Numero sbagliato");
 		}
-		return true;	    	Categoria categoriaCercata = null;
-
+		return true;
 	}
 	
 	
