@@ -276,7 +276,8 @@ public class InterfacciaTestuale {
 		else if (eliminaOggetto < 0 || eliminaOggetto > 3) {
 			throw new NumeroSbagliatoException ("Numero sbagliato");
 		}
-		return true;
+		return true;	    	Categoria categoriaCercata = null;
+
 	}
 	
 	
@@ -331,6 +332,7 @@ public class InterfacciaTestuale {
 	static double chiediPrezzo (Scanner scanner) throws NumeroSbagliatoException {
 		
 		double prezzo = scanner.nextDouble();
+		scanner.nextLine();
 		if (prezzo < 0) {
 			throw new NumeroSbagliatoException ("prezzo non valido.");
 		}
