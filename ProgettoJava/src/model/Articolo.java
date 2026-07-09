@@ -2,20 +2,23 @@ package model;
 
 public class Articolo {
 
-	Categoria categoria;
-	double prezzo;
-	String nota;
+	private Categoria categoria;
+	private double prezzo;
+	private String nota;
 	
 	public Articolo (Categoria categoria, double prezzo, String nota) {
+		
 		if (categoria == null) {
 			this.categoria = new Categoria ("non categorizzato");
-		}
+		}	
 		else this.categoria = categoria;
+		
 		if (prezzo == 0) {
 			this.prezzo = 0;
 		}
 		else this.prezzo = prezzo;
-		if (nota == null || nota == "") {
+		
+		if (nota == null || nota.equals("")) {
 			this.nota = "";
 		}
 		else this.nota = nota;
@@ -34,15 +37,25 @@ public class Articolo {
 	}
 	
 	public void setNota (String nota) {
-		this.nota = nota;
+		if (nota == null) {
+			this.nota = "";
+		} else {
+			this.nota = nota;
+		}
 	}
 	
 	public void setPrezzo (double prezzo) {
-		this.prezzo = prezzo;
+		if (prezzo >= 0) {
+			this.prezzo = prezzo;
+		}
 	}
 	
-	public void setNota (Categoria categoria) {
-		this.categoria = categoria;
+	public void setCategoria (Categoria categoria) {
+		if (categoria == null) {
+			this.categoria = new Categoria("non categorizzato");
+		} else {
+			this.categoria = categoria;
+		}
 	}
 	
 }
