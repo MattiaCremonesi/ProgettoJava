@@ -129,7 +129,8 @@ public class InterfacciaTestuale {
 		if (eliminaModifica == 1) {
 			boolean ripetiCancellazione = true;
 			do {
-				System.out.println("\n[1] per eliminare una lista...");
+				System.out.println("\nCANCELLAZIONE\n");
+				System.out.println("[1] per eliminare una lista...");
 				System.out.println("[2] per eliminare una categoria...");
 				System.out.println("[3] per eliminare un articolo...");
 				System.out.println("[0] per tornare indietro...");
@@ -138,7 +139,16 @@ public class InterfacciaTestuale {
 			while (ripetiCancellazione);
 		}
 		else if (eliminaModifica == 2) {
-			System.out.println("Funzionalità di modifica (da implementare)...");
+			boolean ripetiModifica = true; 
+			do {
+				System.out.println("\nMODIFICA ARTICOLO\n");
+				System.out.println ("\n[1] per modificare il prezzo di un articolo...");
+				System.out.println ("[2] per modificare la categoria di un articolo...");
+				System.out.println ("[3] per modificare la nota di un articolo...");
+				System.out.println ("[0] per tornare indietro...");
+				ripetiModifica = modifica (scanner);
+			}
+			while (ripetiModifica);
 		}
 		else if (eliminaModifica == 0) {
 			return false; 
@@ -148,6 +158,20 @@ public class InterfacciaTestuale {
 		}
 		return true;
 	}
+	
+	
+	
+	
+	
+	
+	static boolean modifica (Scanner scanner) throws NumeroSbagliatoException {
+		System.out.println ("Inserisci la nota dell'articolo da modificare: ");
+		scanner.nextLine();
+		ArrayList<String> nota_art = chiediNotaArticolo (scanner);
+		
+		return true;
+	}
+	
 	
 	
 	
@@ -225,14 +249,10 @@ public class InterfacciaTestuale {
 	static ArrayList<Object> chiediInfArticolo(Scanner scanner) throws NumeroSbagliatoException {
 		ArrayList<Object> lista = new ArrayList<>();
 		System.out.println("Inserisci il prezzo dell'articolo...");
-		double num = scanner.nextDouble();
-		scanner.nextLine();
-		if (num < 0) {
-			throw new NumeroSbagliatoException("Numero negativo non valido.");
-		}
-		lista.add(num);
+		double prezzo = chiediPrezzo (scanner);
+		lista.add(prezzo);
 		
-		System.out.println("Inserisci una nota per l'articolo (oppure premi 'n' per nessuna nota):");
+		System.out.println("Inserisci una nota per l'articolo (oppure premi 'n' per nessuna nota): ");
 		String nota = scanner.nextLine();
 		if (nota.equalsIgnoreCase("n")) {
 			lista.add("");
@@ -253,4 +273,47 @@ public class InterfacciaTestuale {
 		nome = scanner.nextLine();
 		return nome;
 	}	
+	
+	
+	
+
+	
+	static double chiediPrezzo (Scanner scanner) throws NumeroSbagliatoException {
+		double prezzo = scanner.nextDouble();
+		if (prezzo < 0) {
+			throw new NumeroSbagliatoException ("prezzo non valido.");
+		}
+		return prezzo;
+	}
+	
+	
+	
+	
+	
+	static ArrayList<String> chiediNotaArticolo (Scanner scanner) {
+		ArrayList<String> arrayNoteTrovate = new ArrayList<>();
+		String stringaNota = scanner.next();
+		for (Articolo a : GestioneListe.articoli) {
+			if (a.getNota().startsWith(stringaNota)) {
+				arrayNoteTrovate.add(a.getNota());
+			}
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
