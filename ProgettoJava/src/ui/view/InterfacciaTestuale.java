@@ -171,6 +171,12 @@ public class InterfacciaTestuale {
 	static boolean modifica (Scanner scanner) throws NumeroSbagliatoException {
 		int cosaModificare = scanner.nextInt();
 		scanner.nextLine();
+		if (cosaModificare == 0) {
+			return false;
+		}
+		else if (cosaModificare < 0 || cosaModificare > 3) {
+			throw new NumeroSbagliatoException ("Input non valido.");
+		}
 		System.out.println ("Inserisci la nota dell'articolo da modificare: ");
 		String notaCercata = scanner.nextLine();
 		
@@ -182,6 +188,11 @@ public class InterfacciaTestuale {
 	        }
 	    }
 	    
+	    if (articoloTrovato == null) {
+	    	System.out.println ("Articolo non trovato.");
+	    	return true;
+	    }
+	    
 	    if (cosaModificare == 1) {
 	    	System.out.println ("Inserisci il prezzo da modificare: ");
 	    	double prezzo = chiediPrezzo (scanner);
@@ -190,12 +201,21 @@ public class InterfacciaTestuale {
 	    }
 	    else if (cosaModificare == 2) {
 	    	String categoria = chiediInfCategoria (scanner);
+	    	Categoria categoriaCercata = null;
+		    for (Categoria c : GestioneListe.categorie) {
+		        if (c.getNome().equalsIgnoreCase(categoria)) {
+		            categoriaCercata = c;
+		            break;
+		        }
+		    }
+		    articoloTrovato.setCategoria(categoriaCercata);
+		    System.out.println ("Categoria modificata: " + articoloTrovato.getCategoria());
+		}
+	    else if (cosaModificare == 3) {
+	    	String nota = scanner.nextLine();
+	    	articoloTrovato.setNota(nota);
+	    	System.out.println ("Nota modificata: " + articoloTrovato.getNota());
 	    }
-	    else if (cosaModificare == 0) {
-	    	
-	    }
-	    else if (cosaModificare < 0 || cosaModificare > 2)
-	    	throw new NumeroSbagliatoException ("Input non valido.");
 		return true;
 	}
 	
@@ -210,7 +230,7 @@ public class InterfacciaTestuale {
 		
 		if (eliminaOggetto == 1) {
 			System.out.println("Inserisci il nome della lista da eliminare...");
-			String nomeListaEliminare = scanner.next();	 
+			String nomeListaEliminare = scanner.nextLine();	 
 			if (GestioneListe.listeArticoli.containsKey(nomeListaEliminare)) {
 				GestioneListe.CancellaLista(nomeListaEliminare);
 				System.out.println("Lista eliminata con successo.");
@@ -220,7 +240,7 @@ public class InterfacciaTestuale {
 		}
 		else if (eliminaOggetto == 2) {
 			System.out.println("Inserisci il nome della categoria da eliminare...");
-			String nomeCat = scanner.next();
+			String nomeCat = scanner.nextLine();
 			boolean trovata = false;
 			for (Categoria c : GestioneListe.categorie) {
 				if (c.getNome().equalsIgnoreCase(nomeCat)) {
@@ -236,7 +256,7 @@ public class InterfacciaTestuale {
 		} 
 		else if (eliminaOggetto == 3) {
 			System.out.println("Inserisci la nota dell'articolo da eliminare...");
-			String notaCercata = scanner.next();
+			String notaCercata = scanner.nextLine();
 			boolean trovata = false;
 			for (Articolo a : GestioneListe.articoli) {
 				if (a.getNota().equalsIgnoreCase(notaCercata)) {
@@ -315,22 +335,6 @@ public class InterfacciaTestuale {
 			throw new NumeroSbagliatoException ("prezzo non valido.");
 		}
 		return prezzo;
-	}
-	
-	
-	
-	
-	
-	static ArrayList<String> chiediNotaArticolo (Scanner scanner) {
-		
-		ArrayList<String> arrayNoteTrovate = new ArrayList<>();
-		String stringaNota = scanner.next();
-		for (Articolo a : GestioneListe.articoli) {
-			if (a.getNota().startsWith(stringaNota)) {
-				arrayNoteTrovate.add(a.getNota());
-			}
-		}
-		return null;
 	}
 	
 	
