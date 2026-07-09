@@ -22,7 +22,6 @@ public class ListaDiArticoli implements Iterable<Articolo> {
 	}
 	
 	public void cancellaArticolo (Articolo a) {
-		contenitoreArticolo.remove (a);
 		if (contenitoreArticolo.remove (a)) {
 			articoliCancellati.add (a);
 		}
