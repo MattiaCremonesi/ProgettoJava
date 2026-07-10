@@ -20,13 +20,15 @@ public class Articolo {
 	public Articolo (Categoria categoria, double prezzo, String nota) {
 		if (categoria == null) {
 			this.categoria = new Categoria ("non categorizzato");
-		} else {
+		} 
+		else {
 			this.categoria = categoria;
 		}
-		
+			
 		if (prezzo < 0) {
 			this.prezzo = 0;
-		} else {
+		} 
+		else {
 			this.prezzo = prezzo;
 		}
 		
