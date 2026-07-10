@@ -6,8 +6,17 @@ import java.util.Scanner;
 import model.*;
 import model.exception.NumeroSbagliatoException; 
 
+/**
+ * Gestisce l'interfaccia utente da riga di comando (Terminale) per il sistema di gestione liste.
+ * Fornisce menu interattivi catturando le eccezioni e permettendo di ripetere le operazioni.
+ * * @author IlTuoNome E IlNomeDelCompagno
+ */
 public class InterfacciaTestuale {
 
+	/**
+	 * Avvia il ciclo principale dell'interfaccia testuale gestendo i menu e le eccezioni globali.
+	 * * @param scanner lo scanner di sistema per leggere l'input
+	 */
 	public void avvia(Scanner scanner) {
 		
 		boolean ripeti = true;
@@ -15,29 +24,31 @@ public class InterfacciaTestuale {
 		do {
 			System.out.println("\nMENU PRINCIPALE TERMINALE");
 			System.out.println("[1] per creare una lista di articoli...");
-			System.out.println("[2] per visualizzare o modificare una lista di articoli...");
+			System.out.println("[2] per visualizzare o modificare/eliminare una lista di articoli...");
 			System.out.println("[0] per uscire dal programma...");
 			
 			try {
 				ripeti = MenuPrincipale (scanner);
 			} 
 			catch (NumeroSbagliatoException e) {
-				System.out.println ("Inserisci o [1] o [2]: ");
+				System.out.println ("Errore: " + e.getMessage());
 			}
 			catch (InputMismatchException e) {
 				System.out.println("Errore: Tipo di input non valido. Inserisci un numero.");
 				scanner.nextLine();
 			} 
 			catch (Exception e) {
-				System.out.printf("Si è verificato un errore: %s\n", e.getMessage());
+				System.out.printf("Si è verificato un errore imprevisto: %s\n", e.getMessage());
 			}
 		} while (ripeti);	
 	}
 	
-	
-	
-	
-	
+	/**
+	 * Gestisce la logica del menu principale.
+	 * * @param scanner lo scanner per l'input
+	 * @return true se il programma deve continuare, false se l'utente desidera uscire
+	 * @throws NumeroSbagliatoException se viene inserito un codice di menu non valido
+	 */
 	static boolean MenuPrincipale (Scanner scanner) throws NumeroSbagliatoException {
 		
 		int CreaVisualizzaLista = scanner.nextInt();
@@ -76,15 +87,17 @@ public class InterfacciaTestuale {
 			while (ripetiVisualizzaModifica);
 		}
 		else if (CreaVisualizzaLista < 0 || CreaVisualizzaLista > 2) {
-			throw new NumeroSbagliatoException ("Numero sbagliato.");
+			throw new NumeroSbagliatoException ("Scelta non valida nel menu principale.");
 		}
 		return true;
 	}
 	
-	
-	
-	
-	
+	/**
+	 * Gestisce le sotto-operazioni di visualizzazione globale e reindirizzamento alle modifiche delle liste.
+	 * * @param scanner lo scanner per l'input
+	 * @return true per rimanere nel menu corrente, false per tornare indietro
+	 * @throws NumeroSbagliatoException se l'input numerico non rientra nelle opzioni disponibili
+	 */
 	static boolean gestioneListe (Scanner scanner) throws NumeroSbagliatoException {
 		
 		int VisualizzaModifica = scanner.nextInt();
@@ -93,10 +106,16 @@ public class InterfacciaTestuale {
 		if (VisualizzaModifica == 1) {						
 			if (GestioneListe.listeArticoli.isEmpty()) {
 				System.out.println("L'archivio delle liste è vuoto");
-			} else {
+			} 
+			else {
 				System.out.println("Liste disponibili:");
 				for (ListaDiArticoli liste : GestioneListe.listeArticoli.values()) {
 					System.out.println("- " + liste.getListaNome());
+					
+					// Sfrutta l'iterazione polimorfica (Iterable) richiesta dal professore
+					for (Articolo a : liste) {
+						System.out.println("   -> Articolo: " + a.getNota() + " | Prezzo: " + a.getPrezzo() + "€");
+					}
 				}	
 			}
 		}
@@ -116,15 +135,17 @@ public class InterfacciaTestuale {
 			return false;
 		}
 		else if (VisualizzaModifica < 0 || VisualizzaModifica > 2){
-			throw new NumeroSbagliatoException("Input sbagliato.");
+			throw new NumeroSbagliatoException("Scelta non valida in Gestione Liste.");
 		}
 		return true;
 	}
 	
-	
-	
-	
-	
+	/**
+	 * Smista le scelte dell'utente tra i menu dedicati alla modifica o alla cancellazione degli elementi.
+	 * * @param scanner lo scanner per l'input
+	 * @return true per rimanere nel menu, false per risalire di un livello
+	 * @throws NumeroSbagliatoException se l'utente inserisce un valore non valido
+	 */
 	static boolean modificaCancellazione (Scanner scanner) throws NumeroSbagliatoException {
 		
 		int eliminaModifica = scanner.nextInt();
@@ -158,40 +179,33 @@ public class InterfacciaTestuale {
 			return false; 
 		}
 		else if (eliminaModifica < 0 || eliminaModifica > 2) {
-			throw new NumeroSbagliatoException ("Numero sbagliato.");
+			throw new NumeroSbagliatoException ("Scelta non valida in Modifica/Cancellazione.");
 		}
 		return true;
 	}
 	
-	
-	
-	
-	
-	
+	/**
+	 * Esegue le modifiche sui campi interni di un articolo recuperato tramite interazione con la logica del Model.
+	 * * @param scanner lo scanner per l'input
+	 * @return true per continuare l'interazione, false in caso di uscita volontaria
+	 * @throws NumeroSbagliatoException se l'articolo non esiste o la scelta del campo è fuori range
+	 */
 	static boolean modifica (Scanner scanner) throws NumeroSbagliatoException {
 		int cosaModificare = scanner.nextInt();
 		scanner.nextLine();
+		
 		if (cosaModificare == 0) {
 			return false;
 		}
 		else if (cosaModificare < 0 || cosaModificare > 3) {
-			throw new NumeroSbagliatoException ("Input non valido.");
+			throw new NumeroSbagliatoException ("Input di modifica non valido.");
 		}
+		
 		System.out.println ("Inserisci la nota dell'articolo da modificare: ");
 		String notaCercata = scanner.nextLine();
 		
-		Articolo articoloTrovato = null;
-	    for (Articolo a : GestioneListe.articoli) {
-	        if (a.getNota().equalsIgnoreCase(notaCercata)) {
-	            articoloTrovato = a;
-	            break;
-	        }
-	    }
-	    
-	    if (articoloTrovato == null) {
-	    	System.out.println ("Articolo non trovato.");
-	    	return true;
-	    }
+		// Invocazione del metodo di ricerca centralizzato del model (niente cicli qui)
+		Articolo articoloTrovato = GestioneListe.cercaArticoloGlobale(notaCercata);
 	    
 	    if (cosaModificare == 1) {
 	    	System.out.println ("Inserisci il prezzo da modificare: ");
@@ -200,18 +214,13 @@ public class InterfacciaTestuale {
 	    	System.out.println ("Prezzo modificato: " + articoloTrovato.getPrezzo());
 	    }
 	    else if (cosaModificare == 2) {
-	    	String categoria = chiediInfCategoria (scanner);
-	    	Categoria categoriaCercata = null;
-		    for (Categoria c : GestioneListe.categorie) {
-		        if (c.getNome().equalsIgnoreCase(categoria)) {
-		            categoriaCercata = c;
-		            break;
-		        }
-		    }
+	    	String nomeCat = chiediInfCategoria (scanner);
+	    	Categoria categoriaCercata = GestioneListe.cercaCategoriaGlobale(nomeCat);
 		    articoloTrovato.setCategoria(categoriaCercata);
 		    System.out.println ("Categoria modificata: " + articoloTrovato.getCategoria());
 		}
 	    else if (cosaModificare == 3) {
+	    	System.out.println ("Inserisci la nuova nota: ");
 	    	String nota = scanner.nextLine();
 	    	articoloTrovato.setNota(nota);
 	    	System.out.println ("Nota modificata: " + articoloTrovato.getNota());
@@ -219,10 +228,12 @@ public class InterfacciaTestuale {
 		return true;
 	}
 	
-	
-	
-	
-	
+	/**
+	 * Coordina l'eliminazione logica o fisica di liste, categorie o singoli articoli interrogando il Model.
+	 * * @param scanner lo scanner per l'input
+	 * @return true per rimanere nel sottomenu di cancellazione, false per arretrare
+	 * @throws NumeroSbagliatoException se le risorse cercate non vengono trovate o l'input numerico è errato
+	 */
 	static boolean cancellazione (Scanner scanner) throws NumeroSbagliatoException {
 		
 		int eliminaOggetto = scanner.nextInt();
@@ -235,65 +246,48 @@ public class InterfacciaTestuale {
 				GestioneListe.CancellaLista(nomeListaEliminare);
 				System.out.println("Lista eliminata con successo.");
 			} else {
-				System.out.println("Nome della lista non trovato.");
+				throw new NumeroSbagliatoException("Nome della lista cercata non trovato nell'archivio.");
 			}
 		}
 		else if (eliminaOggetto == 2) {
 			System.out.println("Inserisci il nome della categoria da eliminare...");
 			String nomeCat = scanner.nextLine();
-			boolean trovata = false;
-			for (Categoria c : GestioneListe.categorie) {
-				if (c.getNome().equalsIgnoreCase(nomeCat)) {
-					GestioneListe.CancellaCategoria(c);
-					System.out.println("Categoria cancellata.");
-					trovata = true;
-					break;
-				}
-			}
-			if (!trovata) {
-				System.out.println("Categoria non trovata.");
-			}
+			Categoria c = GestioneListe.cercaCategoriaGlobale(nomeCat);
+			GestioneListe.CancellaCategoria(c);
+			System.out.println("Categoria cancellata.");
 		} 
 		else if (eliminaOggetto == 3) {
 			System.out.println("Inserisci la nota dell'articolo da eliminare...");
 			String notaCercata = scanner.nextLine();
-			boolean trovata = false;
-			for (Articolo a : GestioneListe.articoli) {
-				if (a.getNota().equalsIgnoreCase(notaCercata)) {
-					GestioneListe.CancellaArticolo(a);
-					System.out.println("Articolo eliminato con successo.");
-					trovata = true;
-					break;
-				}
-			}
-			if (!trovata) {
-				System.out.println("Articolo non trovato con questa nota.");
-			}
+			Articolo a = GestioneListe.cercaArticoloGlobale(notaCercata);
+			GestioneListe.CancellaArticolo(a);
+			System.out.println("Articolo eliminato con successo.");
 		}
 		else if (eliminaOggetto == 0) {
 			return false;
 		}
 		else if (eliminaOggetto < 0 || eliminaOggetto > 3) {
-			throw new NumeroSbagliatoException ("Numero sbagliato");
+			throw new NumeroSbagliatoException ("Numero di opzione cancellazione errato.");
 		}
 		return true;
 	}
 	
-	
-	
-
+	/**
+	 * Richiede l'input testuale per il nome di una categoria.
+	 * * @param scanner lo scanner per l'input
+	 * @return il nome inserito dall'utente
+	 */
 	static String chiediInfCategoria(Scanner scanner) {
-		
-		String nome = "";
 		System.out.println("Inserisci il nome della categoria: ");
-		nome = scanner.nextLine();
-		return nome;
+		return scanner.nextLine();
 	}
 	
-	
-	
-	
-	
+	/**
+	 * Acquisisce i dettagli informativi iniziali per la creazione strutturata di un Articolo.
+	 * * @param scanner lo scanner per l'input
+	 * @return un ArrayList contenente nell'ordine il prezzo (Double) e la nota (String)
+	 * @throws NumeroSbagliatoException se il prezzo inserito viola i limiti di validità
+	 */
 	static ArrayList<Object> chiediInfArticolo(Scanner scanner) throws NumeroSbagliatoException {
 		
 		ArrayList<Object> lista = new ArrayList<>();
@@ -312,45 +306,28 @@ public class InterfacciaTestuale {
 		return lista;
 	}
 	
-	
-	
-	
-	
+	/**
+	 * Richiede l'input del nome identificativo da assegnare ad una nuova lista.
+	 * * @param scanner lo scanner per l'input
+	 * @return il nome identificativo letto
+	 */
 	static String chiediInfLista(Scanner scanner) {
-		
-		String nome = "";
 		System.out.println("Inserisci il nome della lista...");
-		nome = scanner.nextLine();
-		return nome;
+		return scanner.nextLine();
 	}	
 	
-	
-	
-
-	
+	/**
+	 * Acquisisce e valida un valore monetario di tipo double.
+	 * * @param scanner lo scanner per l'input
+	 * @return il valore monetario positivo convalidato
+	 * @throws NumeroSbagliatoException se il prezzo inserito è un numero negativo
+	 */
 	static double chiediPrezzo (Scanner scanner) throws NumeroSbagliatoException {
-		
 		double prezzo = scanner.nextDouble();
 		scanner.nextLine();
 		if (prezzo < 0) {
-			throw new NumeroSbagliatoException ("prezzo non valido.");
+			throw new NumeroSbagliatoException ("Il prezzo inserito non può essere inferiore a zero.");
 		}
 		return prezzo;
 	}
-	
-	
-	
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-

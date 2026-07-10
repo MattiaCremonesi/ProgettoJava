@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import model.exception.NumeroSbagliatoException;
 
 /**
  * Rappresenta una lista della spesa contenente un elenco di articoli attivi
@@ -9,9 +10,8 @@ import java.util.Iterator;
  * Implementa Iterable per permettere di scorrere tutti gli articoli (attivi e cancellati).
  * * @author IlTuoNome E IlNomeDelCompagno
  */
-public class ListaDiArticoli {
+public class ListaDiArticoli implements Iterable<Articolo> {
 
-	// Rendiamo esplicitamente privato anche il nome della lista
 	private String nome;
 	private ArrayList<Articolo> contenitoreArticolo = new ArrayList<>();
 	private ArrayList<Articolo> articoliCancellati = new ArrayList<>();
@@ -35,7 +35,7 @@ public class ListaDiArticoli {
 	
 	/**
 	 * Restituisce il nome della lista.
-	 * @return il nome della lista
+	 * * @return il nome della lista
 	 */
 	public String getListaNome () {
 		return this.nome;
@@ -43,7 +43,6 @@ public class ListaDiArticoli {
 	
 	/**
 	 * Rimuove un articolo dalla lista attiva e lo sposta nel cestino dei cancellati.
-	 * (CORRETTO: Risolto bug del doppio remove)
 	 * * @param a l'articolo da cancellare
 	 */
 	public void cancellaArticolo (Articolo a) {
@@ -54,7 +53,7 @@ public class ListaDiArticoli {
 	
 	/**
 	 * Aggiunge un nuovo articolo alla lista degli articoli attivi.
-	 * @param a l'articolo da aggiungere
+	 * * @param a l'articolo da aggiungere
 	 */
 	public void aggiungiArticolo (Articolo a) {
 		if (a != null) {
@@ -71,6 +70,63 @@ public class ListaDiArticoli {
 			contenitoreArticolo.add(a);
 		}
 	}
-	
-	//Continuare con gli altri metodi, se vuoi continuo io
+
+	/**
+	 * Calcola il prezzo totale di tutti gli articoli attivi presenti nella lista.
+	 * * @return il prezzo totale degli articoli
+	 */
+	public double calcolaPrezzoTotale() {
+		double totale = 0;
+		for (Articolo a : contenitoreArticolo) {
+			totale += a.getPrezzo();
+		}
+		return totale;
+	}
+
+	/**
+	 * Cerca un articolo all'interno della lista controllando se il prefisso della 
+	 * nota corrisponde alla stringa cercata. La ricerca avviene sia tra gli articoli 
+	 * attivi che tra quelli cancellati.
+	 * * @param prefisso il prefisso della nota da cercare
+	 * @return l'articolo trovato, oppure null se non esiste
+	 */
+	public Articolo cercaArticoloPerPrefisso(String prefisso) {
+		for (Articolo a : contenitoreArticolo) {
+			if (a.getNota().startsWith(prefisso)) {
+				return a;
+			}
+		}
+		for (Articolo a : articoliCancellati) {
+			if (a.getNota().startsWith(prefisso)) {
+				return a;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Restituisce un iteratore personalizzato che permette di scorrere sequenzialmente 
+	 * prima tutti gli articoli attivi e successivamente tutti gli articoli cancellati.
+	 * * @return un Iterator di tipo Articolo
+	 */
+	@Override
+	public Iterator<Articolo> iterator() {
+		return new Iterator<Articolo>() {
+			private int index = 0;
+
+			@Override
+			public boolean hasNext() {
+				return index < (contenitoreArticolo.size() + articoliCancellati.size());
+			}
+
+			@Override
+			public Articolo next() {
+				if (index < contenitoreArticolo.size()) {
+					return contenitoreArticolo.get(index++);
+				} else {
+					return articoliCancellati.get(index++ - contenitoreArticolo.size());
+				}
+			}
+		};
+	}
 }
