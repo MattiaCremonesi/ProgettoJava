@@ -148,7 +148,7 @@ public class ListaDiArticoli implements Iterable<Articolo> {
 	 */
 	@Override
 	public Iterator<Articolo> iterator() {
-		return new Iterator<Articolo>() {
+		return new Iterator<Articolo>() {	
 			private int index = 0;
 
 			@Override
