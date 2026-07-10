@@ -111,6 +111,30 @@ public class ListaDiArticoli implements Iterable<Articolo> {
 	}
 	
 	/**
+	 * Cerca un articolo specifico esclusivamente all'interno del cestino (articoli cancellati)
+	 * tramite la sua nota esatta.
+	 * La ricerca rimuove gli spazi vuoti iniziali/finali e ignora maiuscole e minuscole.
+	 * * @param nota la nota esatta dell'articolo da cercare nel cestino
+	 * @return l'oggetto Articolo trovato se presente, oppure null se l'articolo 
+	 * not è nel cestino o se il parametro inserito non è valido
+	 */
+	public Articolo cercaNeiCancellati(String nota) {
+		if (nota == null || nota.trim().isEmpty()) {
+			return null;
+		}
+		
+		String notalower = nota.trim().toLowerCase();
+		for (Articolo a : articoliCancellati) {
+			if (a.getNota() != null && a.getNota().toLowerCase().equals(notalower)) {
+				return a;
+			}
+		}
+		return null;
+	}
+	
+	
+	
+	/**
 	 * Svuota definitivamente il cestino eliminando tutti gli articoli cancellati.
 	 */
 	public void svuotaCancellati() {

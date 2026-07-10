@@ -153,4 +153,32 @@ public class ListaDiArticoliTest {
             it.next();
         });
     }
+    
+    @Test
+    public void testCercaNeiCancellati() {
+        Categoria cat = new Categoria("Alimentari");
+        Articolo art1 = new Articolo(cat, 1.50, "Pasta");
+        Articolo art2 = new Articolo(cat, 2.00, "Sugo");
+        
+        ListaDiArticoli lista = new ListaDiArticoli("Spesa", art1);
+        lista.aggiungiArticolo(art2);
+        
+        // All'inizio entrambi sono attivi, quindi nel cestino non deve trovare nulla
+        assertNull(lista.cercaNeiCancellati("Pasta"));
+        
+        // Cancelliamo "Pasta" per mandarlo nei cancellati
+        lista.cancellaArticolo(art1);
+        
+        // 1. Verifica ricerca con successo (case-insensitive ed esatta)
+        Articolo trovato = lista.cercaNeiCancellati("  pAsTa  ");
+        assertNotNull(trovato, "L'articolo doveva essere trovato nel cestino");
+        assertEquals("Pasta", trovato.getNota());
+        
+        // 2. Verifica che "Sugo" (ancora attivo) non sia trovato nei cancellati
+        assertNull(lista.cercaNeiCancellati("Sugo"));
+        
+        // 3. Verifica input non validi (null o stringa vuota)
+        assertNull(lista.cercaNeiCancellati(""));
+        assertNull(lista.cercaNeiCancellati(null));
+    }
 }
