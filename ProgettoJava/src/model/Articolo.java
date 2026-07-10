@@ -94,4 +94,13 @@ public class Articolo {
 			this.categoria = categoria;
 		}
 	}
+	
+	/**
+	 * Restituisce una rappresentazione testuale leggibile dell'articolo.
+	 * * @return la stringa che descrive l'articolo
+	 */
+	@Override
+	public String toString() {
+		return "Articolo [Nota=" + this.nota + ", Prezzo=" + this.prezzo + "€, Categoria=" + this.categoria.getNome() + "]";
+	}
 }

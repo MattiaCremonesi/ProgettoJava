@@ -2,13 +2,14 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import model.exception.NumeroSbagliatoException;
 
 /**
  * Rappresenta una lista della spesa contenente un elenco di articoli attivi
  * e un elenco di articoli cancellati (il cestino).
  * Implementa Iterable per permettere di scorrere tutti gli articoli (attivi e cancellati).
- * * @author IlTuoNome E IlNomeDelCompagno
+ * * @author Davide Aime e Mattia Cremonesi
  */
 public class ListaDiArticoli implements Iterable<Articolo> {
 
@@ -42,13 +43,12 @@ public class ListaDiArticoli implements Iterable<Articolo> {
 	}
 	
 	/**
-	 * Rimuove un articolo dalla lista attiva e lo sposta nel cestino dei cancellati.
-	 * * @param a l'articolo da cancellare
+	 * Restituisce una copia dell'elenco degli articoli attivi nella lista.
+	 * @return un ArrayList contenente gli articoli attivi
 	 */
-	public void cancellaArticolo (Articolo a) {
-		if (contenitoreArticolo.remove(a)) {
-			articoliCancellati.add(a);
-		}
+	public ArrayList<Articolo> getArticoliAttivi() {
+		// Restituisce una nuova lista che contiene gli stessi elementi (copia di sicurezza)
+		return new ArrayList<>(this.contenitoreArticolo);
 	}
 	
 	/**
@@ -91,17 +91,30 @@ public class ListaDiArticoli implements Iterable<Articolo> {
 	 * @return l'articolo trovato, oppure null se non esiste
 	 */
 	public Articolo cercaArticoloPerPrefisso(String prefisso) {
+		
+		if (prefisso == null || prefisso.trim().isEmpty()) {
+			return null;
+		}
+		
+		String prefissoLower = prefisso.trim().toLowerCase();
 		for (Articolo a : contenitoreArticolo) {
-			if (a.getNota().startsWith(prefisso)) {
+			if (a.getNota() != null && a.getNota().toLowerCase().startsWith(prefissoLower)) {
 				return a;
 			}
 		}
 		for (Articolo a : articoliCancellati) {
-			if (a.getNota().startsWith(prefisso)) {
+			if (a.getNota() != null && a.getNota().toLowerCase().startsWith(prefissoLower)) {
 				return a;
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Svuota definitivamente il cestino eliminando tutti gli articoli cancellati.
+	 */
+	public void svuotaCancellati() {
+		this.articoliCancellati.clear();
 	}
 
 	/**
@@ -121,6 +134,9 @@ public class ListaDiArticoli implements Iterable<Articolo> {
 
 			@Override
 			public Articolo next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException("Nessun altro articolo disponibile nella lista.");
+				}
 				if (index < contenitoreArticolo.size()) {
 					return contenitoreArticolo.get(index++);
 				} else {
@@ -128,5 +144,24 @@ public class ListaDiArticoli implements Iterable<Articolo> {
 				}
 			}
 		};
+	}
+	
+	/**
+	 * Restituisce una copia dell'elenco degli articoli presenti nel cestino (cancellati).
+	 * @return un ArrayList contenente gli articoli cancellati
+	 */
+	public ArrayList<Articolo> getArticoliCancellati() {
+		// Restituisce una nuova lista che contiene gli stessi elementi (copia di sicurezza)
+		return new ArrayList<>(this.articoliCancellati);
+	}
+	
+	/**
+	 * Rimuove un articolo dalla lista attiva e lo sposta nel cestino dei cancellati.
+	 * * @param a l'articolo da cancellare
+	 */
+	public void cancellaArticolo (Articolo a) {
+		if (contenitoreArticolo.remove(a)) {
+			articoliCancellati.add(a);
+		}
 	}
 }
