@@ -7,7 +7,7 @@ import model.exception.NumeroSbagliatoException;
 
 /**
  * Classe di test JUnit per verificare le funzionalità di GestioneListe.
- * * @author IlTuoNome E IlNomeDelCompagno
+ * * @author Davide Aime E Mattia Cremonesi
  */
 public class GestioneListeTest {
 

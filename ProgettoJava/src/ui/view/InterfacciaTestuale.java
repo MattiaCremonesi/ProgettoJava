@@ -12,23 +12,26 @@ public class InterfacciaTestuale {
 		boolean ripeti = true;
 		
 		do {
-			System.out.println("\nMENU PRINCIPALE TERMINALE");
-			System.out.println("[1] per creare una lista di articoli...");
-			System.out.println("[2] per visualizzare o modificare/eliminare una lista di articoli...");
-			System.out.println("[0] per uscire dal programma...");
+			System.out.println("\n========================================");
+			System.out.println("          MENU PRINCIPALE               ");
+			System.out.println("========================================");
+			System.out.println("[1] Crea una nuova lista della spesa");
+			System.out.println("[2] Gestisci l'archivio (Visualizza/Modifica/Elimina)");
+			System.out.println("[0] Esci dal programma");
+			System.out.print("Scegli un'opzione: ");
 			
 			try {
 				ripeti = menuPrincipale(scanner);
 			} 
 			catch (NumeroSbagliatoException e) {
-				System.out.println("Errore: " + e.getMessage());
+				System.out.println("\n[!] Errore: " + e.getMessage());
 			}
 			catch (InputMismatchException e) {
-				System.out.println("Errore: Tipo di input non valido. Inserisci un numero.");
+				System.out.println("\n[!] Errore: Tipo di input non valido. Inserisci un numero.");
 				scanner.nextLine();
 			} 
 			catch (Exception e) {
-				System.out.printf("Si è verificato un errore imprevisto: %s\n", e.getMessage());
+				System.out.printf("\n[!] Si è verificato un errore imprevisto: %s\n", e.getMessage());
 			}
 		} while (ripeti);	
 	}
@@ -51,10 +54,13 @@ public class InterfacciaTestuale {
 			case 2:
 				boolean ripetiVisualizzaModifica = true;
 				do {
-					System.out.println("\nGESTIONE LISTE");
-					System.out.println("[1] per visualizzare le tue liste...");
-					System.out.println("[2] per modificare o eliminare...");
-					System.out.println("[0] per tornare indietro...");
+					System.out.println("\n----------------------------------------");
+					System.out.println("       PANNELLO DI GESTIONE LISTE         ");
+					System.out.println("----------------------------------------");
+					System.out.println("[1] Visualizza le tue liste");
+					System.out.println("[2] Modifica o Elimina elementi globali");
+					System.out.println("[0] Torna al menu principale");
+					System.out.print("Scegli un'opzione: ");
 					ripetiVisualizzaModifica = gestioneListe(scanner);
 				}
 				while (ripetiVisualizzaModifica);
@@ -64,6 +70,7 @@ public class InterfacciaTestuale {
 	}
 
 	static void creaNuovaLista(Scanner scanner) throws NumeroSbagliatoException {
+		System.out.println("\n--- CREAZIONE NUOVA LISTA ---");
 		String nomeCategoria = chiediInfCategoria(scanner); 
 		Categoria categoria = new Categoria(nomeCategoria);
 		ArrayList<Object> listaInfArticoli = chiediInfArticolo(scanner);
@@ -78,7 +85,7 @@ public class InterfacciaTestuale {
 		GestioneListe.inserisciCategoria(categoria);
 		GestioneListe.inserisciArticolo(articolo);
 		GestioneListe.creaLista(nomeLista, articolo);
-		System.out.println("Lista creata con successo!");
+		System.out.println("\n[V] Lista '" + nomeLista + "' creata con successo insieme al primo articolo!");
 	}
 	
 	static boolean gestioneListe(Scanner scanner) throws NumeroSbagliatoException {
@@ -95,10 +102,13 @@ public class InterfacciaTestuale {
 			case 1:
 				boolean ripetiVisualizzaCerca = true;
 				do {
-					System.out.println ("\nVISUALIZZA LISTE\n");
-					System.out.println ("[1] per visualizzare le liste");
-					System.out.println ("[2] per operare su una lista specifica");
-					System.out.println ("[0] per tornare indietro");
+					System.out.println("\n----------------------------------------");
+					System.out.println("          VISUALIZZAZIONE LISTE         ");
+					System.out.println("----------------------------------------");
+					System.out.println("[1] Mostra il riepilogo di TUTTE le liste");
+					System.out.println("[2] Seleziona e opera su una lista specifica");
+					System.out.println("[0] Torna indietro");
+					System.out.print("Scegli un'opzione: ");
 					ripetiVisualizzaCerca = menuVisualizzaListe(scanner);
 				} 
 				while (ripetiVisualizzaCerca);
@@ -106,10 +116,13 @@ public class InterfacciaTestuale {
 			case 2:
 				boolean ripetiModificaElimina = true;
 				do {
-					System.out.println("\nMODIFICA E CANCELLAZIONE");
-					System.out.println("[1] per eliminare (Lista/Categoria/Articolo)...");
-					System.out.println("[2] per modificare un articolo o una categoria...");
-					System.out.println("[0] per tornare indietro...");
+					System.out.println("\n----------------------------------------");
+					System.out.println("         MODIFICA E CANCELLAZIONE       ");
+					System.out.println("----------------------------------------");
+					System.out.println("[1] Elimina definitivamente (Lista/Categoria/Articolo)");
+					System.out.println("[2] Modifica i dati di un articolo o una categoria");
+					System.out.println("[0] Torna indietro");
+					System.out.print("Scegli un'opzione: ");
 					ripetiModificaElimina = modificaCancellazione(scanner);
 				} 
 				while (ripetiModificaElimina);
@@ -127,7 +140,7 @@ public class InterfacciaTestuale {
 		}
 		
 		if (visCerca != 0 && GestioneListe.getListeArticoli().isEmpty()) {
-			System.out.println("L'archivio delle liste è vuoto");
+			System.out.println("\n[!] L'archivio è vuoto. Non ci sono liste registrate.");
 			return true;
 		}
 		
@@ -145,12 +158,21 @@ public class InterfacciaTestuale {
 	}
 
 	static void stampaTutteLeListe() {
-		System.out.println("Liste disponibili:");
-		for (ListaDiArticoli liste : GestioneListe.getListeArticoli().values()) {
-			System.out.println("- " + liste.getListaNome());
-			for (Articolo a : liste) {
-				System.out.println("   -> Articolo: " + a.getNota() + " | Prezzo: " + a.getPrezzo() + "€");
+		System.out.println("\n========================================");
+		System.out.println("       RIEPILOGO GENERALE ARCHIVIO      ");
+		System.out.println("========================================");
+		for (ListaDiArticoli lista : GestioneListe.getListeArticoli().values()) {
+			System.out.println("\n📂 LISTA: " + lista.getListaNome().toUpperCase());
+			System.out.println("----------------------------------------");
+			
+			for (Articolo a : lista) {
+				if (lista.getArticoliCancellati().contains(a)) {
+					System.out.println("   [CESTINO] -> " + a.getNota() + " (" + a.getCategoria().getNome() + ") | " + a.getPrezzo() + "€");
+				} else {
+					System.out.println("   (Attivo)  -> " + a.getNota() + " (" + a.getCategoria().getNome() + ") | " + a.getPrezzo() + "€");
+				}
 			}
+			System.out.println("----------------------------------------");
 		}
 	}
 
@@ -179,13 +201,17 @@ public class InterfacciaTestuale {
 	}
 
 	static void eseguiOperazioniSuLista(Scanner scanner, ListaDiArticoli listaSelezionata) throws NumeroSbagliatoException {
-		System.out.println("\nMENU OPZIONI LISTA: " + listaSelezionata.getListaNome().toUpperCase() + " ---");
-		System.out.println("[1] Cerca articolo per prefisso");
-		System.out.println("[2] Calcola prezzo totale");
-		System.out.println("[3] Ripristina articolo eliminato");
-		System.out.println("[4] Svuota cestino eliminati");
-		System.out.println("[5] Aggiungi articolo alla lista");
-		System.out.println("[0] Torna indietro");
+		System.out.println("\n========================================");
+		System.out.println("  OPZIONI LISTA: " + listaSelezionata.getListaNome().toUpperCase());
+		System.out.println("========================================");
+		System.out.println("[1] Cerca articolo per prefisso (Attivo o Cestinato)");
+		System.out.println("[2] Calcola il prezzo totale corrente");
+		System.out.println("[3] Sposta un articolo nel CESTINO (Elimina)");
+		System.out.println("[4] RIPRISTINA un articolo dal cestino");
+		System.out.println("[5] SVUOTA permanentemente il cestino");
+		System.out.println("[6] Aggiungi un nuovo articolo a questa lista");
+		System.out.println("[0] Esci da questa lista");
+		System.out.print("Scegli un'operazione: ");
 		
 		int operazione = scanner.nextInt();
 		scanner.nextLine();
@@ -198,13 +224,25 @@ public class InterfacciaTestuale {
 				System.out.println("Prezzo totale degli articoli attivi: " + listaSelezionata.calcolaPrezzoTotale() + "€");
 				break;
 			case 3:
-				ripristinaDaCestino(scanner, listaSelezionata);
+				System.out.println("Inserisci la nota esatta dell'articolo da mettere nel cestino:");
+				String notaDaCancellare = scanner.nextLine();
+				Articolo daCancellare = listaSelezionata.cercaArticoloPerPrefisso(notaDaCancellare);
+				
+				if (daCancellare != null) {
+					listaSelezionata.cancellaArticolo(daCancellare);
+					System.out.println("Articolo '" + daCancellare.getNota() + "' spostato nel cestino.");
+				} else {
+					System.out.println("Articolo non trovato in questa lista.");
+				}
 				break;
 			case 4:
+				ripristinaDaCestino(scanner, listaSelezionata);
+				break;
+			case 5:
 				listaSelezionata.svuotaCancellati();
 				System.out.println("Il cestino degli articoli eliminati è stato svuotato.");
 				break;
-			case 5:
+			case 6:
 				String nomeCategoria = chiediInfCategoria(scanner); 
 				Categoria categoria = new Categoria(nomeCategoria);
 				ArrayList<Object> listaInfArticoli = chiediInfArticolo(scanner);
@@ -268,11 +306,14 @@ public class InterfacciaTestuale {
 			case 1:
 				boolean ripetiCancellazione = true;
 				do {
-					System.out.println("\nCANCELLAZIONE\n");
-					System.out.println("[1] per eliminare una lista...");
-					System.out.println("[2] per eliminare una categoria...");
-					System.out.println("[3] per eliminare un articolo...");
-					System.out.println("[0] per tornare indietro...");
+					System.out.println("\n----------------------------------------");
+					System.out.println("          ELIMINAZIONE GLOBALE          ");
+					System.out.println("----------------------------------------");
+					System.out.println("[1] Elimina del tutto una LISTA");
+					System.out.println("[2] Elimina del tutto una CATEGORIA");
+					System.out.println("[3] Elimina del tutto un ARTICOLO");
+					System.out.println("[0] Torna indietro");
+					System.out.print("Scegli un'opzione: ");
 					ripetiCancellazione = cancellazione(scanner);
 				}
 				while (ripetiCancellazione);
@@ -280,11 +321,14 @@ public class InterfacciaTestuale {
 			case 2:
 				boolean ripetiModifica = true; 
 				do {
-					System.out.println("\nMODIFICA ARTICOLO\n");
-					System.out.println ("\n[1] per modificare il prezzo di un articolo...");
-					System.out.println ("[2] per modificare la categoria di un articolo...");
-					System.out.println ("[3] per modificare la nota di un articolo...");
-					System.out.println ("[0] per tornare indietro...");
+					System.out.println("\n----------------------------------------");
+					System.out.println("          MODIFICA IN LINEA             ");
+					System.out.println("----------------------------------------");
+					System.out.println("[1] Modifica il PREZZO di un articolo");
+					System.out.println("[2] Modifica la CATEGORIA di un articolo");
+					System.out.println("[3] Modifica la NOTA di un articolo");
+					System.out.println("[0] Torna indietro");
+					System.out.print("Scegli un'opzione: ");
 					ripetiModifica = modifica(scanner);
 				}
 				while (ripetiModifica);
@@ -321,7 +365,7 @@ public class InterfacciaTestuale {
 				String nomeCat = chiediInfCategoria(scanner);
 				Categoria categoriaCercata = GestioneListe.cercaCategoriaGlobale(nomeCat);
 				articoloTrovato.setCategoria(categoriaCercata);
-				System.out.println("Categoria modificata: " + articoloTrovato.getCategoria());
+				System.out.println("Categoria modificata: " + articoloTrovato.getCategoria().getNome());
 				break;
 			case 3:
 				System.out.println("Inserisci la nuova nota: ");
@@ -400,11 +444,15 @@ public class InterfacciaTestuale {
 	}	
 	
 	static double chiediPrezzo(Scanner scanner) throws NumeroSbagliatoException {
-		double prezzo = scanner.nextDouble();
-		scanner.nextLine();
-		if (prezzo < 0) {
-			throw new NumeroSbagliatoException("Il prezzo inserito non può essere inferiore a zero.");
+		String input = scanner.nextLine().replace(",", ".");
+		try {
+			double prezzo = Double.parseDouble(input);
+			if (prezzo < 0) {
+				throw new NumeroSbagliatoException("Il prezzo inserito non può essere inferiore a zero.");
+			}
+			return prezzo;
+		} catch (NumberFormatException e) {
+			throw new NumeroSbagliatoException("Formato prezzo non valido. Inserisci un numero (es. 2.50).");
 		}
-		return prezzo;
 	}
 }

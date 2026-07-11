@@ -3,6 +3,11 @@ package model;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe di test JUnit per verificare tutte le funzionalità della classe Articolo.
+ * * @author Davide Aime E Mattia Cremonesi
+ */
+
 public class ArticoloTest {
 
     @Test

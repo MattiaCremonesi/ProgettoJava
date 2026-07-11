@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 
 /**
  * Classe di test JUnit per verificare tutte le funzionalità della classe ListaDiArticoli.
- * * @author IlTuoNome E IlNomeDelCompagno
+ * * @author Davide Aime E Mattia Cremonesi
  */
 public class ListaDiArticoliTest {
 
