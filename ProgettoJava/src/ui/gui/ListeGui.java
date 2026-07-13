@@ -1,7 +1,6 @@
 package ui.gui;
 
 import javax.swing.JFrame;
-import ui.gui.controller.GuiController;
 import ui.gui.view.FinestraPrincipale;
 
 /**
@@ -24,7 +23,7 @@ public class ListeGui extends JFrame {
 		FinestraPrincipale finestraPrincipale = new FinestraPrincipale();
 		setContentPane(finestraPrincipale);
 
-		new GuiController(finestraPrincipale);
+		//new GuiController(finestraPrincipale);
 		
 		// Rende visibile l'interfaccia
 		setVisible(true);

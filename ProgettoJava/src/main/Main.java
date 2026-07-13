@@ -6,6 +6,8 @@ import java.util.Scanner;
 import model.*;
 import model.exception.NumeroSbagliatoException;
 import ui.view.InterfacciaTestuale;
+import ui.gui.view.*;
+import ui.gui.ListeGui;
 
 //main
 
@@ -46,6 +48,7 @@ public class Main {
         } 
         else if (scelta == 1) {
             System.out.println("Avvio da interfaccia grafica...");
+            new ListeGui();
         } 
         else {
             throw new NumeroSbagliatoException ("Input iniziale non valido.");
