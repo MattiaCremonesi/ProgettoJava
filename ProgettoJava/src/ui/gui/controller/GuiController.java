@@ -51,19 +51,22 @@ public class GuiController implements ActionListener {
 					mainFrame.revalidate();
 					mainFrame.repaint();
 				}
-			} else {
+			} 
+			else {
 				JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(vistaPrincipale);
 				JOptionPane.showMessageDialog(mainFrame, "Seleziona una lista prima di aprirla.");
 			}
 
-		} else if (source.getText().equals("Totale €")) {
+		} 
+		else if (source.getText().equals("Totale €")) {
 			System.out.println("Totale €");
 			if (vistaDettaglio != null) {
 				double totale = vistaDettaglio.getListaModello().calcolaPrezzoTotale();
 				JOptionPane.showMessageDialog(vistaDettaglio, "Il totale è: " + totale + "€");
 			}
 
-		} else if (source.getText().equals("Cerca")) {
+		} 
+		else if (source.getText().equals("Cerca")) {
 			System.out.println("Cerca");
 			if (vistaDettaglio != null) {
 				String termine = vistaDettaglio.chiediStringaRicerca();
@@ -72,25 +75,27 @@ public class GuiController implements ActionListener {
 				}
 			}
 
-		} else if (source.getText().equals("Svuota Cestino")) {
+		} 
+		else if (source.getText().equals("Svuota Cestino")) {
 			System.out.println("Svuota Cestino");
 			if (vistaDettaglio != null) {
 				vistaDettaglio.getListaModello().svuotaCancellati();
 			}
 			
-		} else if (source.getText().equals("Nuova Lista")) {
+		} 
+		else if (source.getText().equals("Nuova Lista")) {
 			System.out.println("Nuova Lista");
-			// Logica creazione lista...
 			
-		} else if (source.getText().equals("Elimina Lista")) {
-			System.out.println("Elimina Lista");
-			// Logica eliminazione lista...
+		} 
+		else if (source.getText().equals("Elimina Lista")) {
+			System.out.println("Elimina Lista"); 
 		}
 
 		// Aggiornamento della vista corrente (proprio come il tuo view.updateView())
 		if (vistaDettaglio != null) {
 			vistaDettaglio.aggiornaElencoArticoli();
-		} else {
+		} 
+		else {
 			vistaPrincipale.aggiornaElencoListe();
 		}
 	}

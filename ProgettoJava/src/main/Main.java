@@ -48,8 +48,12 @@ public class Main {
         } 
         else if (scelta == 1) {
             System.out.println("Avvio da interfaccia grafica...");
+            Articolo articoloTest = new Articolo(new Categoria("prova"), 20, "Articolo Prova");
+            
+            GestioneListe.creaLista("Spesa Esselunga", articoloTest);
+			
             new ListeGui();
-        } 
+		}
         else {
             throw new NumeroSbagliatoException ("Input iniziale non valido.");
         }
