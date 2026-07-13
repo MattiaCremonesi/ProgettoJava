@@ -65,6 +65,23 @@ public class FinestraPrincipale extends JPanel {
     public String getNomeListaSelezionata() {
         return listaGraficaComponente.getSelectedValue();
     }
+    
+ // Piccola aggiunta per permettere al controller di agganciarsi
+    public JButton getBtnApri() { return btnApri; }
+    public JButton getBtnCrea() { return btnCrea; }
+    public JButton getBtnElimina() { return btnElimina; }
 
-
+    /**
+     * MAIN DI TEST: Permette di avviare questa classe da sola.
+     */
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Anteprima Interfaccia");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(550, 400);
+            frame.add(new FinestraPrincipale());
+            frame.setLocationRelativeTo(null); // Centra la finestra
+            frame.setVisible(true);
+        });
+    }
 }
