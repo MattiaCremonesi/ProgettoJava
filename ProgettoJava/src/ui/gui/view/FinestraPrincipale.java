@@ -66,17 +66,5 @@ public class FinestraPrincipale extends JPanel {
         return listaGraficaComponente.getSelectedValue();
     }
 
-    /**
-     * MAIN DI TEST: Permette di avviare questa classe da sola.
-     */
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Anteprima Interfaccia");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(550, 400);
-            frame.add(new FinestraPrincipale());
-            frame.setLocationRelativeTo(null); // Centra la finestra
-            frame.setVisible(true);
-        });
-    }
+
 }

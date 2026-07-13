@@ -162,7 +162,7 @@ public class InterfacciaTestuale {
 		System.out.println("       RIEPILOGO GENERALE ARCHIVIO      ");
 		System.out.println("========================================");
 		for (ListaDiArticoli lista : GestioneListe.getListeArticoli().values()) {
-			System.out.println("\n📂 LISTA: " + lista.getListaNome().toUpperCase());
+			System.out.println("\nLISTA: " + lista.getListaNome().toUpperCase());
 			System.out.println("----------------------------------------");
 			
 			for (Articolo a : lista) {
