@@ -6,6 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import model.Articolo;
 import model.GestioneListe;
 import model.ListaDiArticoli;
 import ui.gui.view.FinestraDettaglioLista;
@@ -66,12 +68,41 @@ public class GuiController implements ActionListener {
 			}
 
 		} 
+		
+		else if (source.getText().equals("Cestina")) {
+			System.out.println("Cestina");
+			int indiceArticolo = vistaDettaglio.getIndiceArticoloSelezionato();
+			if (indiceArticolo != -1) {
+				int contatore = 0;
+				Articolo articoloDaCestinare = null;
+				for (Articolo a : vistaDettaglio.getListaModello()) {
+					if (contatore == indiceArticolo) {
+						articoloDaCestinare = a;
+						break;
+					}
+					contatore++;
+				}
+				GestioneListe.cancellaArticolo(articoloDaCestinare);
+				JOptionPane.showMessageDialog(vistaDettaglio, "Articolo cestinato.");
+				vistaDettaglio.aggiornaElencoArticoli();
+			}
+			else {
+				JOptionPane.showMessageDialog(vistaDettaglio, "Articolo non selezionato.");
+			}
+		}
+		
 		else if (source.getText().equals("Cerca")) {
 			System.out.println("Cerca");
 			if (vistaDettaglio != null) {
 				String termine = vistaDettaglio.chiediStringaRicerca();
 				if (termine != null) {
-					vistaDettaglio.getListaModello().cercaArticoloPerPrefisso(termine);
+					Articolo a = vistaDettaglio.getListaModello().cercaArticoloPerPrefisso(termine);
+					if (a == null) {
+						JOptionPane.showMessageDialog(vistaDettaglio, "Nessun articolo trovato.");
+					}
+					else {
+						JOptionPane.showMessageDialog(vistaDettaglio, a.toString());
+					}
 				}
 			}
 
