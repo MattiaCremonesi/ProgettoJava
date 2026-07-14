@@ -6,6 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import model.Articolo;
 import model.GestioneListe;
 import model.ListaDiArticoli;
 import ui.gui.view.FinestraDettaglioLista;
@@ -71,7 +73,11 @@ public class GuiController implements ActionListener {
 			if (vistaDettaglio != null) {
 				String termine = vistaDettaglio.chiediStringaRicerca();
 				if (termine != null) {
-					vistaDettaglio.getListaModello().cercaArticoloPerPrefisso(termine);
+					Articolo a = vistaDettaglio.getListaModello().cercaArticoloPerPrefisso(termine);
+					JOptionPane.showMessageDialog(vistaDettaglio, "Nota: " +a.getNota() + ", Categoria: " + a.getCategoria() + ", Prezzo: " + a.getPrezzo() + "€");
+				}
+				else {
+					JOptionPane.showMessageDialog(vistaDettaglio, "Articolo non trovato nella lista");
 				}
 			}
 
