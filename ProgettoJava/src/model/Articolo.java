@@ -103,6 +103,14 @@ public class Articolo {
 	 */
 	@Override
 	public String toString() {
-		return "Articolo [Nota=" + this.nota + ", Prezzo=" + this.prezzo + "€, Categoria=" + this.categoria.getNome() + "]";
+	return "Nota: " + this.nota + ", Categoria: " + this.categoria + ", Prezzo: " + this.prezzo + "€";
 	}
 }
+	
+	
+	
+	
+	
+	
+	
+	

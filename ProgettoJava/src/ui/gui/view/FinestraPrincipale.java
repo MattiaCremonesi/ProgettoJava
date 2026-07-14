@@ -36,9 +36,9 @@ public class FinestraPrincipale extends JPanel {
         JPanel pannelloBottoni = new JPanel(new GridLayout(3, 1, 5, 10));
         pannelloBottoni.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
 
-        btnApri = new JButton("Apri Lista");
-        btnCrea = new JButton("Nuova Lista");
-        btnElimina = new JButton("Elimina Lista");
+        btnApri = 		new JButton("Apri Lista");
+        btnCrea = 		new JButton("Nuova Lista");
+        btnElimina = 	new JButton("Elimina Lista");
 
         pannelloBottoni.add(btnApri);
         pannelloBottoni.add(btnCrea);
@@ -67,9 +67,9 @@ public class FinestraPrincipale extends JPanel {
     }
     
  // Piccola aggiunta per permettere al controller di agganciarsi
-    public JButton getBtnApri() { return btnApri; }
-    public JButton getBtnCrea() { return btnCrea; }
-    public JButton getBtnElimina() { return btnElimina; }
+    public JButton getBtnApri() 	{ return btnApri; }
+    public JButton getBtnCrea() 	{ return btnCrea; }
+    public JButton getBtnElimina() 	{ return btnElimina; }
 
     /**
      * MAIN DI TEST: Permette di avviare questa classe da sola.

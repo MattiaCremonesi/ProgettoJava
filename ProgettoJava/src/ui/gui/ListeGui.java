@@ -19,13 +19,15 @@ public class ListeGui extends JFrame {
 	public ListeGui() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 550, 400);
+		setBounds(100, 100, 950, 400);
 		setTitle("Gestione Liste della Spesa - Interfaccia Grafica");
 
 		FinestraPrincipale finestraPrincipale = new FinestraPrincipale();
 		setContentPane(finestraPrincipale);
 
-		new GuiController(finestraPrincipale);
+		new GuiController(this, finestraPrincipale);
+		
+		setLocationRelativeTo(null);
 		
 		// Rende visibile l'interfaccia				
 		setVisible(true);

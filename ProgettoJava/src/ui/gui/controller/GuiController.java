@@ -10,21 +10,24 @@ import javax.swing.SwingUtilities;
 import model.Articolo;
 import model.GestioneListe;
 import model.ListaDiArticoli;
+import ui.gui.ListeGui;
 import ui.gui.view.FinestraDettaglioLista;
 import ui.gui.view.FinestraPrincipale;
 
 public class GuiController implements ActionListener {
 
+	private ListeGui framePrincipale;
 	private FinestraPrincipale vistaPrincipale;
 	private FinestraDettaglioLista vistaDettaglio;
 
-	public GuiController(FinestraPrincipale vistaPrincipale) {
-		this.vistaPrincipale = vistaPrincipale;
-		
-		this.vistaPrincipale.getBtnApri().addActionListener(this);
-		this.vistaPrincipale.getBtnCrea().addActionListener(this);
-		this.vistaPrincipale.getBtnElimina().addActionListener(this);
-	}
+	public GuiController(ListeGui framePrincipale, FinestraPrincipale vistaPrincipale) {
+        this.framePrincipale = framePrincipale;
+        this.vistaPrincipale = vistaPrincipale;
+
+        this.vistaPrincipale.getBtnApri().addActionListener(this);
+        this.vistaPrincipale.getBtnCrea().addActionListener(this);
+        this.vistaPrincipale.getBtnElimina().addActionListener(this);
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -46,6 +49,7 @@ public class GuiController implements ActionListener {
 				vistaDettaglio.getBtnRipristina().addActionListener(this);
 				vistaDettaglio.getBtnSvuotaCestino().addActionListener(this);
 				vistaDettaglio.getBtnAggiungi().addActionListener(this);
+				vistaDettaglio.getBtnIndietro().addActionListener(this);
 				
 				JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(vistaPrincipale);
 				if (mainFrame != null) {
@@ -60,6 +64,18 @@ public class GuiController implements ActionListener {
 			}
 
 		} 
+		
+		else if (source.getText().equals("Indietro")) {
+		    System.out.println("Ritorno alla schermata principale...");
+		    
+		    vistaPrincipale.aggiornaElencoListe(); 
+		  
+		    framePrincipale.setContentPane(vistaPrincipale);
+		    
+		    framePrincipale.revalidate();
+		    framePrincipale.repaint();
+		}
+		
 		else if (source.getText().equals("Totale €")) {
 			System.out.println("Totale €");
 			if (vistaDettaglio != null) {
@@ -91,6 +107,28 @@ public class GuiController implements ActionListener {
 			}
 		}
 		
+		else if (source.getText().equals("Ripristina")) {
+			System.out.println ("Ripristina");
+			int indiceArticolo = vistaDettaglio.getIndiceArticoloSelezionato();
+			if (indiceArticolo != -1) {
+				int contatore = 0;
+				Articolo articoloDaRipristinare = null;
+				for (Articolo a : vistaDettaglio.getListaModello()) {
+					if (contatore == indiceArticolo) {
+						articoloDaRipristinare = a;
+						break;
+					}
+					contatore++;
+				}
+				vistaDettaglio.getListaModello().ripristinaArticolo(articoloDaRipristinare);
+				JOptionPane.showMessageDialog(vistaDettaglio, "Articolo ripristinato.");
+				vistaDettaglio.aggiornaElencoArticoli();
+			}		
+			else {
+				JOptionPane.showMessageDialog(vistaDettaglio, "Articolo non selezionato.");
+			}
+		}
+		
 		else if (source.getText().equals("Cerca")) {
 			System.out.println("Cerca");
 			if (vistaDettaglio != null) {
@@ -103,6 +141,9 @@ public class GuiController implements ActionListener {
 					else {
 						JOptionPane.showMessageDialog(vistaDettaglio, a.toString());
 					}
+				}
+				else {
+					JOptionPane.showMessageDialog(vistaDettaglio, "Articolo non trovato nella lista");
 				}
 			}
 
@@ -122,7 +163,6 @@ public class GuiController implements ActionListener {
 			System.out.println("Elimina Lista"); 
 		}
 
-		// Aggiornamento della vista corrente (proprio come il tuo view.updateView())
 		if (vistaDettaglio != null) {
 			vistaDettaglio.aggiornaElencoArticoli();
 		} 
