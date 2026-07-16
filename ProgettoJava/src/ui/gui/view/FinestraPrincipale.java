@@ -39,10 +39,10 @@ public class FinestraPrincipale extends JPanel {
 		JPanel pannelloBottoni = new JPanel(new GridLayout(1, 4, 10, 0));
 		pannelloBottoni.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        btnApri = new JButton("Apri Lista");
-        btnCrea = new JButton("Nuova Lista");
-        btnModifica = new JButton("Modifica Lista");
-        btnElimina = new JButton("Elimina Lista");
+        btnApri = 		new JButton("Apri Lista");
+        btnCrea = 		new JButton("Nuova Lista");
+        btnModifica = 	new JButton("Modifica Lista");
+        btnElimina = 	new JButton("Elimina Lista");
 
         pannelloBottoni.add(btnApri);
         pannelloBottoni.add(btnCrea);
@@ -61,7 +61,8 @@ public class FinestraPrincipale extends JPanel {
                     listaDatiModel.addElement(nomeLista);
                 }
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             System.out.println("Nota: GestioneListe non ancora inizializzata.");
         }
     }
@@ -72,7 +73,7 @@ public class FinestraPrincipale extends JPanel {
     
     public JButton getBtnApri() 	{ return btnApri; }
     public JButton getBtnCrea() 	{ return btnCrea; }
-    public JButton getBtnModifica() 	{ return btnModifica; }
+    public JButton getBtnModifica() { return btnModifica; }
     public JButton getBtnElimina() 	{ return btnElimina; }
 
     /**
@@ -81,6 +82,7 @@ public class FinestraPrincipale extends JPanel {
 	 * @param nomeIniziale  Il nome di partenza (vuoto se nuova lista, altrimenti il nome attuale)
 	 * @return il nuovo nome inserito dall'utente se preme OK, altrimenti null se preme Annulla.
 	 */
+    
 	public String mostraFormLista(String titolo, String nomeIniziale) {
 
 		JPanel pannelloInput = new JPanel(new BorderLayout(5, 5));

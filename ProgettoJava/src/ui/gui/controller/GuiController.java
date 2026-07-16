@@ -27,6 +27,7 @@ public class GuiController implements ActionListener {
         this.vistaPrincipale.getBtnApri().addActionListener(this);
         this.vistaPrincipale.getBtnCrea().addActionListener(this);
         this.vistaPrincipale.getBtnElimina().addActionListener(this);
+        this.vistaPrincipale.getBtnModifica().addActionListener(this);
     }
 
 	@Override
@@ -161,6 +162,29 @@ public class GuiController implements ActionListener {
 		} 
 		else if (source.getText().equals("Elimina Lista")) {
 			System.out.println("Elimina Lista"); 
+		}
+		
+		else if (source.getText().equals("Modifica Lista")) {
+		    System.out.println("Modifica Lista");
+		    String nomeAttuale = vistaPrincipale.getNomeListaSelezionata();
+		    
+		    if (nomeAttuale != null) {
+		        String nuovoNome = vistaPrincipale.mostraFormLista("Rinomina Lista", nomeAttuale);
+		        
+		        if (nuovoNome != null && !nuovoNome.trim().isEmpty() && !nuovoNome.equals(nomeAttuale)) {
+		            ListaDiArticoli lista = GestioneListe.getListeArticoli().get(nomeAttuale);
+		            
+		            if (lista != null) {
+		                GestioneListe.getListeArticoli().remove(nomeAttuale);
+		                GestioneListe.getListeArticoli().put(nuovoNome, lista);
+		                vistaPrincipale.aggiornaElencoListe();
+		                JOptionPane.showMessageDialog(framePrincipale, "Lista rinominata in: " + nuovoNome);
+		            }
+		        }
+		    } 
+		    else {
+		        JOptionPane.showMessageDialog(framePrincipale, "Seleziona prima una lista da modificare.");
+		    }
 		}
 
 		if (vistaDettaglio != null) {
