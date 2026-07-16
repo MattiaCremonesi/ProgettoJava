@@ -6,160 +6,230 @@ import model.ListaDiArticoli;
 import model.Articolo;
 
 /**
- * Pannello di dettaglio di una specifica lista.
- * Layout basato sullo schema a singolo elenco centrale e bottoni orizzontali in basso.
- * * @author Davide Aime e Mattia Cremonesi
+ * Questa classe rappresenta il pannello grafico di dettaglio di una singola
+ * lista della spesa. Si occupa esclusivamente di mostrare a video gli articoli 
+ * (sia quelli attivi che quelli spostati nel cestino) e di predisporre i 
+ * pulsanti necessari per interagire con essi.
+ * 
+ * @author Davide Aime e Mattia Cremonesi
  */
 @SuppressWarnings("serial")
 public class FinestraDettaglioLista extends JPanel {
 
-	private ListaDiArticoli listaModello;
+    private ListaDiArticoli          listaModello;
+    private JList<String>            listaArticoliGrafica;
+    private DefaultListModel<String> modelArticoli;
 
-	private JList<String> listaArticoliGrafica;
-	private DefaultListModel<String> modelArticoli;
+    private JButton                  btnCerca;
+    private JButton                  btnCalcolaTotale;
+    private JButton                  btnCestina;
+    private JButton                  btnRipristina;
+    private JButton                  btnSvuotaCestino;
+    private JButton                  btnAggiungi;
+    private JButton                  btnIndietro;
+    private JButton                  btnModifica;
 
-	private JButton btnCerca;
-	private JButton btnCalcolaTotale;
-	private JButton btnCestina;
-	private JButton btnRipristina;
-	private JButton btnSvuotaCestino;
-	private JButton btnAggiungi;
-	private JButton btnIndietro;
-	private JButton btnModifica;
+    /**
+     * Costruisce il pannello grafico associandolo al modello della lista 
+     * passato come parametro. Inizializza i componenti grafici e li dispone 
+     * sullo schermo.
+     * 
+     * @param listaModello il modello di dominio contenente i dati da mostrare
+     */
+    public FinestraDettaglioLista(ListaDiArticoli listaModello) {
+        this.listaModello = listaModello;
+        
+        setLayout(new BorderLayout(10, 10));
+        setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-	/**
-	 * Costruttore: riceve il modello della lista selezionata.
-	 */
-	public FinestraDettaglioLista(ListaDiArticoli listaModello) {
-		this.listaModello = listaModello;
-		
-		setLayout(new BorderLayout(10, 10));
-		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        inizializzaAreaLista();
+        inizializzaAreaBottoni();
 
-		modelArticoli = new DefaultListModel<>();
-		listaArticoliGrafica = new JList<>(modelArticoli);
-		listaArticoliGrafica.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listaArticoliGrafica.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-		
-		JScrollPane scrollPane = new JScrollPane(listaArticoliGrafica);
-		scrollPane.setBorder(BorderFactory.createTitledBorder("Articoli nella lista selezionata: " + listaModello.getListaNome().toUpperCase()));
-		add(scrollPane, BorderLayout.CENTER);
+        aggiornaElencoArticoli();
+    }
 
-		JPanel pannelloBottoni = new JPanel(new GridLayout(1, 6, 8, 0));
+    /**
+     * Imposta l'area centrale della finestra, dedicata all'elenco scrollabile 
+     * degli articoli.
+     */
+    private void inizializzaAreaLista() {
+        modelArticoli        = new DefaultListModel<>();
+        listaArticoliGrafica = new JList<>(modelArticoli);
+        
+        listaArticoliGrafica.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaArticoliGrafica.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        
+        JScrollPane scrollPane = new JScrollPane(listaArticoliGrafica);
+        String      titolo     = "Articoli: " + listaModello.getNome().toUpperCase();
+        
+        scrollPane.setBorder(BorderFactory.createTitledBorder(titolo));
+        add(scrollPane, BorderLayout.CENTER);
+    }
 
-		btnCerca = 			new JButton("Cerca");
-		btnCalcolaTotale = 	new JButton("Totale €");
-		btnCestina = 		new JButton("Cestina");
-		btnRipristina = 	new JButton("Ripristina");
-		btnSvuotaCestino = 	new JButton("Svuota Cestino");
-		btnAggiungi = 		new JButton("Aggiungi");
-		btnModifica = 		new JButton("Modifica");
-		btnIndietro = 		new JButton("Indietro");
+    /**
+     * Prepara e posiziona la pulsantiera nella parte inferiore della finestra.
+     */
+    private void inizializzaAreaBottoni() {
+        JPanel pannelloBottoni = new JPanel(new GridLayout(1, 8, 5, 0));
 
-		pannelloBottoni.add(btnIndietro);
-		pannelloBottoni.add(btnCerca);
-		pannelloBottoni.add(btnCalcolaTotale);
-		pannelloBottoni.add(btnAggiungi);
-		pannelloBottoni.add(btnModifica);
-		pannelloBottoni.add(btnCestina);
-		pannelloBottoni.add(btnRipristina);
-		pannelloBottoni.add(btnSvuotaCestino);
+        btnIndietro      = new JButton("Indietro");
+        btnCerca         = new JButton("Cerca");
+        btnCalcolaTotale = new JButton("Totale €");
+        btnAggiungi      = new JButton("Aggiungi");
+        btnModifica      = new JButton("Modifica");
+        btnCestina       = new JButton("Cestina");
+        btnRipristina    = new JButton("Ripristina");
+        btnSvuotaCestino = new JButton("Svuota Cestino");
 
-		add(pannelloBottoni, BorderLayout.SOUTH);
+        pannelloBottoni.add(btnIndietro);
+        pannelloBottoni.add(btnCerca);
+        pannelloBottoni.add(btnCalcolaTotale);
+        pannelloBottoni.add(btnAggiungi);
+        pannelloBottoni.add(btnModifica);
+        pannelloBottoni.add(btnCestina);
+        pannelloBottoni.add(btnRipristina);
+        pannelloBottoni.add(btnSvuotaCestino);
 
-		aggiornaElencoArticoli();
-	}
+        add(pannelloBottoni, BorderLayout.SOUTH);
+    }
 
-	/**
-	 * Ricarica gli articoli prendendoli dal modello e li inserisce nella JList distinguendo lo stato.
-	 */
-	public void aggiornaElencoArticoli() {
-		modelArticoli.clear();
+    /**
+     * Legge i dati aggiornati dal modello e li inserisce nella lista visibile 
+     * a schermo, formattandoli per distinguere visivamente gli articoli attivi 
+     * da quelli che si trovano nel cestino.
+     */
+    public void aggiornaElencoArticoli() {
+        modelArticoli.clear();
 
-		for (Articolo a : listaModello) {
-			String stato = "[ATTIVO]  ";
-			if (listaModello.getArticoliCancellati().contains(a)) {
-				stato = "[CESTINO] ";
-			}
-			
-			String riga = String.format("%s %-20s | Categoria: %-15s | Prezzo: %.2f€", 
-					stato, a.getNota(), a.getCategoria().getNome(), a.getPrezzo());
-			
-			modelArticoli.addElement(riga);
-		}
-	}
+        for (Articolo a : listaModello) {
+            String rigaFormattata = formattaRigaArticolo(a);
+            modelArticoli.addElement(rigaFormattata);
+        }
+    }
 
-	/**
-	 * Restituisce l'indice dell'articolo selezionato nella JList.
-	 */
-	public int getIndiceArticoloSelezionato() {
-		return listaArticoliGrafica.getSelectedIndex();
-	}
-	
-	/**
-	 * Consente di recuperare il modello dati della lista associata per le operazioni di business.
-	 */
-	public ListaDiArticoli getListaModello() {
-		return listaModello;
-	}
+    /**
+     * Crea una stringa formattata e allineata per rappresentare i dati di 
+     * un singolo articolo nell'elenco grafico.
+     * 
+     * @param a l'articolo da formattare
+     * @return la stringa testuale pronta per essere inserita nella vista
+     */
+    private String formattaRigaArticolo(Articolo a) {
+        String stato = listaModello.getArticoliCancellati().contains(a) 
+                       ? "[CESTINO] " : "[ATTIVO]  ";
+                       
+        return String.format(
+            "%s %-20s | Categoria: %-15s | Prezzo: %.2f€", 
+            stato, 
+            a.getNota(), 
+            a.getCategoria().getNome(), 
+            a.getPrezzo()
+        );
+    }
 
-	// Metodi Getter per i bottoni, fondamentali per il lavoro del tuo compagno (Controller)
-	public JButton getBtnCerca() 			{ return btnCerca; }
-	public JButton getBtnCalcolaTotale() 	{ return btnCalcolaTotale; }
-	public JButton getBtnCestina() 			{ return btnCestina; }
-	public JButton getBtnRipristina() 		{ return btnRipristina; }
-	public JButton getBtnSvuotaCestino() 	{ return btnSvuotaCestino; }
-	public JButton getBtnAggiungi() 		{ return btnAggiungi; }
-	public JButton getBtnIndietro() 		{ return btnIndietro; }
-	public JButton getBtnModifica() 		{ return btnModifica; }
-	
-	/**
-	 * Mostra un pop-up che chiede all'utente di inserire il testo da cercare.
-	 * @return la stringa inserita dall'utente.
-	 */
-	public String chiediStringaRicerca() {
-	    return JOptionPane.showInputDialog(this, "Inserisci il prefisso o la nota da cercare:", "Cerca Articolo", JOptionPane.QUESTION_MESSAGE);
-	}
-	
-	/**
-	 * Mostra una finestra di dialogo (pop-up) condivisa sia per l'inserimento che per la modifica.
-	 * * @param titolo             Il titolo della finestra (es. "Aggiungi Articolo" o "Modifica Articolo")
-	 * @param notaIniziale       Valore di partenza per la nota (vuoto se nuovo articolo)
-	 * @param categoriaIniziale  Valore di partenza per la categoria (vuoto se nuovo articolo)
-	 * @param prezzoIniziale     Valore di partenza per il prezzo (vuoto se nuovo articolo)
-	 * @String[]                 Un array contenente {nota, categoria, prezzo} se l'utente preme OK, altrimenti null.
-	 */
-	public String[] mostraFormArticolo(String titolo, String notaIniziale, String categoriaIniziale, String prezzoIniziale) {
-	
-		JPanel pannelloInput = new JPanel(new GridLayout(3, 2, 10, 10));
-		
-		JTextField txtNota = new JTextField(notaIniziale);
-		JTextField txtCategoria = new JTextField(categoriaIniziale);
-		JTextField txtPrezzo = new JTextField(prezzoIniziale);
+    /**
+     * Restituisce l'indice dell'elemento che l'utente ha selezionato con il mouse
+     * nell'elenco grafico. Utile al controller per capire su quale articolo agire.
+     * 
+     * @return l'indice numerico della selezione, o -1 se nulla è selezionato
+     */
+    public int getIndiceArticoloSelezionato() { 
+        return listaArticoliGrafica.getSelectedIndex(); 
+    }
 
-		pannelloInput.add(new JLabel("Nota / Nome Articolo:"));
-		pannelloInput.add(txtNota);
-		pannelloInput.add(new JLabel("Categoria:"));
-		pannelloInput.add(txtCategoria);
-		pannelloInput.add(new JLabel("Prezzo (€):"));
-		pannelloInput.add(txtPrezzo);
+    /**
+     * Restituisce il modello della lista della spesa attualmente mostrato.
+     * 
+     * @return l'oggetto ListaDiArticoli di dominio
+     */
+    public ListaDiArticoli getListaModello() { 
+        return listaModello; 
+    }
 
-		int risultato = JOptionPane.showConfirmDialog (
-														this, 
-														pannelloInput, 
-														titolo, 
-														JOptionPane.OK_CANCEL_OPTION, 
-														JOptionPane.PLAIN_MESSAGE
-													  );
+    /* Getter dei pulsanti necessari al controller per agganciare i listener */
+    
+    public JButton getBtnCerca()         { return btnCerca; }
+    public JButton getBtnCalcolaTotale() { return btnCalcolaTotale; }
+    public JButton getBtnCestina()       { return btnCestina; }
+    public JButton getBtnRipristina()    { return btnRipristina; }
+    public JButton getBtnSvuotaCestino() { return btnSvuotaCestino; }
+    public JButton getBtnAggiungi()      { return btnAggiungi; }
+    public JButton getBtnIndietro()      { return btnIndietro; }
+    public JButton getBtnModifica()      { return btnModifica; }
+    
+    /**
+     * Mostra una piccola finestra di dialogo per permettere all'utente di 
+     * digitare un termine di ricerca (un prefisso o una nota intera).
+     * 
+     * @return il testo digitato dall'utente, oppure null se preme annulla
+     */
+    public String chiediStringaRicerca() {
+        return JOptionPane.showInputDialog(
+            this, 
+            "Inserisci il prefisso o la nota da cercare:", 
+            "Cerca Articolo", 
+            JOptionPane.QUESTION_MESSAGE
+        );
+    }
+    
+    /**
+     * Mostra un modulo di inserimento per raccogliere o modificare i dati 
+     * di un articolo (nota, categoria e prezzo).
+     * 
+     * @param titolo            il testo da mostrare in cima alla finestra
+     * @param notaIniziale      il nome o la nota pre-compilata nel campo
+     * @param categoriaIniziale la categoria pre-compilata nel campo
+     * @param prezzoIniziale    il prezzo numerico pre-compilato nel campo
+     * @return un array di stringhe contenente i dati inseriti, oppure null se 
+     *         l'utente annulla l'operazione
+     */
+    public String[] mostraFormArticolo(String titolo, String notaIniziale, 
+                                       String categoriaIniziale, String prezzoIniziale) {
+    
+        JTextField txtNota      = new JTextField(notaIniziale);
+        JTextField txtCategoria = new JTextField(categoriaIniziale);
+        JTextField txtPrezzo    = new JTextField(prezzoIniziale);
 
-		if (risultato == JOptionPane.OK_OPTION) {
-			return new String[] {
-				txtNota.getText().trim(),
-				txtCategoria.getText().trim(),
-				txtPrezzo.getText().trim().replace(",", ".")
-			};
-		}
-		
-		return null;
-	}
+        JPanel pannelloInput = assemblaPannelloInput(txtNota, txtCategoria, txtPrezzo);
+
+        int risultato = JOptionPane.showConfirmDialog(
+            this, 
+            pannelloInput, 
+            titolo, 
+            JOptionPane.OK_CANCEL_OPTION, 
+            JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (risultato == JOptionPane.OK_OPTION) {
+            return new String[] {
+                txtNota.getText().trim(),
+                txtCategoria.getText().trim(),
+                txtPrezzo.getText().trim().replace(",", ".")
+            };
+        }
+        
+        return null;
+    }
+
+    /**
+     * Metodo di supporto che assembla fisicamente la griglia dei campi di testo 
+     * necessari per il modulo di un articolo.
+     * 
+     * @param tNota   il campo di testo per la nota
+     * @param tCat    il campo di testo per la categoria
+     * @param tPrezzo il campo di testo per il prezzo
+     * @return il pannello pronto da inserire nella finestra di dialogo
+     */
+    private JPanel assemblaPannelloInput(JTextField tNota, JTextField tCat, JTextField tPrezzo) {
+        JPanel pannello = new JPanel(new GridLayout(3, 2, 10, 10));
+        
+        pannello.add(new JLabel("Nota / Nome Articolo:"));
+        pannello.add(tNota);
+        pannello.add(new JLabel("Categoria:"));
+        pannello.add(tCat);
+        pannello.add(new JLabel("Prezzo (€):"));
+        pannello.add(tPrezzo);
+        
+        return pannello;
+    }
 }

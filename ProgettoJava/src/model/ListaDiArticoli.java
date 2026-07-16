@@ -2,190 +2,116 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-import model.exception.NumeroSbagliatoException;
+import java.util.List;
 
-/**
- * Rappresenta una lista della spesa contenente un elenco di articoli attivi
- * e un elenco di articoli cancellati (il cestino).
- * Implementa Iterable per permettere di scorrere tutti gli articoli (attivi e cancellati).
- * * @author Davide Aime e Mattia Cremonesi
- */
+import model.exception.ElementoNonTrovatoException;
+
 public class ListaDiArticoli implements Iterable<Articolo> {
 
-	private String nome;
-	private ArrayList<Articolo> contenitoreArticolo = new ArrayList<>();
-	private ArrayList<Articolo> articoliCancellati = new ArrayList<>();
-	
-	/**
-	 * Crea una nuova lista con un nome e un articolo iniziale opzionale.
-	 * * @param nome il nome della lista
-	 * @param articolo l'articolo iniziale (può essere null)
-	 */
-	public ListaDiArticoli (String nome, Articolo articolo) {
-		if (nome == null || nome.trim().equals("")) {
-			this.nome = "Nuova Lista";
-		} else {
-			this.nome = nome;
-		}
-		
-		if (articolo != null) {			 
-			contenitoreArticolo.add(articolo);
-		}
-	}
-	
-	/**
-	 * Restituisce il nome della lista.
-	 * * @return il nome della lista
-	 */
-	public String getListaNome () {
-		return this.nome;
-	}
-	
-	/**
-	 * Restituisce una copia dell'elenco degli articoli attivi nella lista.
-	 * @return un ArrayList contenente gli articoli attivi
-	 */
-	public ArrayList<Articolo> getArticoliAttivi() {
-		// Restituisce una nuova lista che contiene gli stessi elementi (copia di sicurezza)
-		return new ArrayList<>(this.contenitoreArticolo);
-	}
-	
-	/**
-	 * Aggiunge un nuovo articolo alla lista degli articoli attivi.
-	 * * @param a l'articolo da aggiungere
-	 */
-	public void aggiungiArticolo (Articolo a) {
-		if (a != null) {
-			contenitoreArticolo.add(a);
-		}
-	}
+    private String nome;
+    private List<Articolo> contenitoreArticolo = new ArrayList<>();
+    private List<Articolo> articoliCancellati = new ArrayList<>();
+    
+    public ListaDiArticoli(String nome, Articolo articolo) {
+        setNome(nome);
+        if (articolo != null) {             
+            contenitoreArticolo.add(articolo);
+        }
+    }
 
-	/**
-	 * Ripristina un articolo dalla lista dei cancellati, riportandolo in quella attiva.
-	 * * @param a l'articolo da ripristinare
-	 */
-	public void ripristinaArticolo(Articolo a) {
-		if (articoliCancellati.remove(a)) {
-			contenitoreArticolo.add(a);
-		}
-	}
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            this.nome = "Nuova Lista";
+        } else {
+            this.nome = nome.trim();
+        }
+    }
+    
+    public String getNome() {
+        return this.nome;
+    }
 
-	/**
-	 * Calcola il prezzo totale di tutti gli articoli attivi presenti nella lista.
-	 * * @return il prezzo totale degli articoli
-	 */
-	public double calcolaPrezzoTotale() {
-		double totale = 0;
-		for (Articolo a : contenitoreArticolo) {
-			totale += a.getPrezzo();
-		}
-		return totale;
-	}
+    public List<Articolo> getContenitoreArticolo() {
+        return this.contenitoreArticolo;
+    }
 
-	/**
-	 * Cerca un articolo all'interno della lista controllando se il prefisso della 
-	 * nota corrisponde alla stringa cercata. La ricerca avviene sia tra gli articoli 
-	 * attivi che tra quelli cancellati.
-	 * * @param prefisso il prefisso della nota da cercare
-	 * @return l'articolo trovato, oppure null se non esiste
-	 */
-	public Articolo cercaArticoloPerPrefisso(String prefisso) {
-		
-		if (prefisso == null || prefisso.trim().isEmpty()) {
-			return null;
-		}
-		
-		String prefissoLower = prefisso.trim().toLowerCase();
-		for (Articolo a : contenitoreArticolo) {
-			if (a.getNota() != null && a.getNota().toLowerCase().startsWith(prefissoLower)) {
-				return a;
-			}
-		}
-		for (Articolo a : articoliCancellati) {
-			if (a.getNota() != null && a.getNota().toLowerCase().startsWith(prefissoLower)) {
-				return a;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Cerca un articolo specifico esclusivamente all'interno del cestino (articoli cancellati)
-	 * tramite la sua nota esatta.
-	 * La ricerca rimuove gli spazi vuoti iniziali/finali e ignora maiuscole e minuscole.
-	 * * @param nota la nota esatta dell'articolo da cercare nel cestino
-	 * @return l'oggetto Articolo trovato se presente, oppure null se l'articolo 
-	 * not è nel cestino o se il parametro inserito non è valido
-	 */
-	public Articolo cercaNeiCancellati(String nota) {
-		if (nota == null || nota.trim().isEmpty()) {
-			return null;
-		}
-		
-		String notalower = nota.trim().toLowerCase();
-		for (Articolo a : articoliCancellati) {
-			if (a.getNota() != null && a.getNota().toLowerCase().equals(notalower)) {
-				return a;
-			}
-		}
-		return null;
-	}
-	
-	
-	
-	/**
-	 * Svuota definitivamente il cestino eliminando tutti gli articoli cancellati.
-	 */
-	public void svuotaCancellati() {
-		this.articoliCancellati.clear();
-	}
+    public List<Articolo> getArticoliCancellati() {
+        return this.articoliCancellati;
+    }
 
-	/**
-	 * Restituisce un iteratore personalizzato che permette di scorrere sequenzialmente 
-	 * prima tutti gli articoli attivi e successivamente tutti gli articoli cancellati.
-	 * * @return un Iterator di tipo Articolo
-	 */
-	@Override
-	public Iterator<Articolo> iterator() {
-		return new Iterator<Articolo>() {	
-			private int index = 0;
+    public void aggiungiArticolo(Articolo articolo) {
+        if (articolo != null && !contenitoreArticolo.contains(articolo)) {
+            contenitoreArticolo.add(articolo);
+        }
+    }
 
-			@Override
-			public boolean hasNext() {
-				return index < (contenitoreArticolo.size() + articoliCancellati.size());
-			}
+    public void cancellaArticolo(Articolo articolo) {
+        if (articolo != null) {
+            contenitoreArticolo.remove(articolo);
+            if (!articoliCancellati.contains(articolo)) {
+                articoliCancellati.add(articolo);
+            }
+        }
+    }
 
-			@Override
-			public Articolo next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException("Nessun altro articolo disponibile nella lista.");
-				}
-				if (index < contenitoreArticolo.size()) {
-					return contenitoreArticolo.get(index++);
-				} else {
-					return articoliCancellati.get(index++ - contenitoreArticolo.size());
-				}
-			}
-		};
-	}
-	
-	/**
-	 * Restituisce una copia dell'elenco degli articoli presenti nel cestino (cancellati).
-	 * @return un ArrayList contenente gli articoli cancellati
-	 */
-	public ArrayList<Articolo> getArticoliCancellati() {
-		// Restituisce una nuova lista che contiene gli stessi elementi (copia di sicurezza)
-		return new ArrayList<>(this.articoliCancellati);
-	}
-	
-	/**
-	 * Rimuove un articolo dalla lista attiva e lo sposta nel cestino dei cancellati.
-	 * * @param a l'articolo da cancellare
-	 */
-	public void cancellaArticolo (Articolo a) {
-		if (contenitoreArticolo.remove(a)) {
-			articoliCancellati.add(a);
-		}
-	}
+    public void ripristinaArticolo(Articolo articolo) {
+        if (articolo != null) {
+            articoliCancellati.remove(articolo);
+            if (!contenitoreArticolo.contains(articolo)) {
+                contenitoreArticolo.add(articolo);
+            }
+        }
+    }
+
+    public void svuotaCancellati() {
+        articoliCancellati.clear();
+    }
+
+    public double calcolaPrezzoTotale() {
+        double totale = 0.0;
+        for (Articolo a : contenitoreArticolo) {
+            totale += a.getPrezzo();
+        }
+        return totale;
+    }
+
+    public Articolo cercaArticoloPerPrefisso(String prefisso) throws ElementoNonTrovatoException {
+        if (prefisso == null || prefisso.trim().isEmpty()) {
+            return null;
+        }
+        
+        String pref = prefisso.trim().toLowerCase();
+        for (Articolo a : contenitoreArticolo) {
+            if (a.getNota().toLowerCase().startsWith(pref)) {
+                return a;
+            }
+        }
+        for (Articolo a : articoliCancellati) {
+            if (a.getNota().toLowerCase().startsWith(pref)) {
+                return a;
+            }
+        }
+        
+        throw new ElementoNonTrovatoException("Articolo non trovato.");
+    }
+
+    public Articolo cercaNeiCancellati(String nota) {
+        if (nota == null || nota.trim().isEmpty()) {
+            return null;
+        }
+        String n = nota.trim().toLowerCase();
+        for (Articolo a : articoliCancellati) {
+            if (a.getNota().toLowerCase().equals(n)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Iterator<Articolo> iterator() {
+        List<Articolo> tutti = new ArrayList<>(contenitoreArticolo);
+        tutti.addAll(articoliCancellati);
+        return tutti.iterator();
+    }
 }
