@@ -19,23 +19,25 @@ public class FinestraPrincipale extends JPanel {
     private JButton btnModifica;
 
     public FinestraPrincipale() {
-        setLayout(new BorderLayout(10, 10));
-
-        // Creazione JList
-        listaDatiModel = new DefaultListModel<>();
-        listaGraficaComponente = new JList<>(listaDatiModel);
-        listaGraficaComponente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listaGraficaComponente.setFont(new Font("Arial", Font.PLAIN, 14));
         
-        JScrollPane scrollPane = new JScrollPane(listaGraficaComponente);
-        JPanel pannelloCentro = new JPanel(new BorderLayout());
-        pannelloCentro.setBorder(BorderFactory.createTitledBorder("Le tue Liste della Spesa"));
-        pannelloCentro.add(scrollPane, BorderLayout.CENTER);
-        add(pannelloCentro, BorderLayout.CENTER);
+    	setLayout(new BorderLayout(10, 10));
+		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15)); // Un po' di margine esterno
 
-        // Creazione Pannello Bottoni
-        JPanel pannelloBottoni = new JPanel(new GridLayout(3, 1, 5, 10));
-        pannelloBottoni.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
+		// 1. AREA CENTRALE: JList per l'elenco delle liste
+		listaDatiModel = new DefaultListModel<>();
+		listaGraficaComponente = new JList<>(listaDatiModel);
+		listaGraficaComponente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		JScrollPane scrollPane = new JScrollPane(listaGraficaComponente);
+		
+		JPanel pannelloCentro = new JPanel(new BorderLayout());
+		pannelloCentro.setBorder(BorderFactory.createTitledBorder("Le tue Liste della Spesa"));
+		pannelloCentro.add(scrollPane, BorderLayout.CENTER);
+		
+		add(pannelloCentro, BorderLayout.CENTER);
+
+		JPanel pannelloBottoni = new JPanel(new GridLayout(1, 4, 10, 0));
+		pannelloBottoni.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
         btnApri = new JButton("Apri Lista");
         btnCrea = new JButton("Nuova Lista");
@@ -46,7 +48,7 @@ public class FinestraPrincipale extends JPanel {
         pannelloBottoni.add(btnCrea);
         pannelloBottoni.add(btnModifica);
         pannelloBottoni.add(btnElimina);
-        add(pannelloBottoni, BorderLayout.EAST);
+        add(pannelloBottoni, BorderLayout.SOUTH);
 
         aggiornaElencoListe();
     }
