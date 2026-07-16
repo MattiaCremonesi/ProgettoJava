@@ -16,6 +16,7 @@ public class FinestraPrincipale extends JPanel {
     private JButton btnApri;
     private JButton btnCrea;
     private JButton btnElimina;
+    private JButton btnModifica;
 
     public FinestraPrincipale() {
         setLayout(new BorderLayout(10, 10));
@@ -36,12 +37,14 @@ public class FinestraPrincipale extends JPanel {
         JPanel pannelloBottoni = new JPanel(new GridLayout(3, 1, 5, 10));
         pannelloBottoni.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
 
-        btnApri = 		new JButton("Apri Lista");
-        btnCrea = 		new JButton("Nuova Lista");
-        btnElimina = 	new JButton("Elimina Lista");
+        btnApri = new JButton("Apri Lista");
+        btnCrea = new JButton("Nuova Lista");
+        btnModifica = new JButton("Modifica Lista");
+        btnElimina = new JButton("Elimina Lista");
 
         pannelloBottoni.add(btnApri);
         pannelloBottoni.add(btnCrea);
+        pannelloBottoni.add(btnModifica);
         pannelloBottoni.add(btnElimina);
         add(pannelloBottoni, BorderLayout.EAST);
 
@@ -50,7 +53,6 @@ public class FinestraPrincipale extends JPanel {
 
     public void aggiornaElencoListe() {
         listaDatiModel.clear();
-        // Controllo di sicurezza: se GestioneListe non è inizializzata, non facciamo nulla
         try {
             if (GestioneListe.getListeArticoli() != null) {
                 for (String nomeLista : GestioneListe.getListeArticoli().keySet()) {
@@ -66,22 +68,32 @@ public class FinestraPrincipale extends JPanel {
         return listaGraficaComponente.getSelectedValue();
     }
     
- // Piccola aggiunta per permettere al controller di agganciarsi
     public JButton getBtnApri() 	{ return btnApri; }
     public JButton getBtnCrea() 	{ return btnCrea; }
+    public JButton getBtnModifica() 	{ return btnModifica; }
     public JButton getBtnElimina() 	{ return btnElimina; }
 
     /**
-     * MAIN DI TEST: Permette di avviare questa classe da sola.
-     */
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Anteprima Interfaccia");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(550, 400);
-            frame.add(new FinestraPrincipale());
-            frame.setLocationRelativeTo(null); // Centra la finestra
-            frame.setVisible(true);
-        });
-    }
+	 * Mostra una finestra di dialogo (pop-up) comune per l'inserimento o la modifica del nome di una lista.
+	 * * @param titolo        Il titolo della finestra (es. "Nuova Lista" o "Rinomina Lista")
+	 * @param nomeIniziale  Il nome di partenza (vuoto se nuova lista, altrimenti il nome attuale)
+	 * @return il nuovo nome inserito dall'utente se preme OK, altrimenti null se preme Annulla.
+	 */
+	public String mostraFormLista(String titolo, String nomeIniziale) {
+
+		JPanel pannelloInput = new JPanel(new BorderLayout(5, 5));
+		JTextField txtNomeLista = new JTextField(nomeIniziale);
+		
+		pannelloInput.add(new JLabel("Nome della lista:"), BorderLayout.NORTH);
+		pannelloInput.add(txtNomeLista, BorderLayout.CENTER);
+
+		int risultato = JOptionPane.showConfirmDialog(this, pannelloInput, 
+				titolo, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		if (risultato == JOptionPane.OK_OPTION) {
+			return txtNomeLista.getText().trim();
+		}
+		
+		return null;
+	}
 }
