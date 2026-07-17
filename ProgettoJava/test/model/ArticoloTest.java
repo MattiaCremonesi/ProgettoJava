@@ -22,7 +22,6 @@ public class ArticoloTest {
 
     @Test
     public void testCostruttoreValoriDefault() {
-        // Testiamo il comportamento quando passiamo parametri null o zero 
         Articolo art = new Articolo(null, 0, null);
         
         assertEquals("non categorizzato", art.getCategoria().getNome(), "Dovrebbe impostare la categoria di default");
@@ -35,7 +34,6 @@ public class ArticoloTest {
         Categoria alimentari = new Categoria("Alimentari");
         Articolo art = new Articolo(alimentari, 1.00, "Pane");
         
-        // Testiamo le modifiche (setter) 
         Categoria freschi = new Categoria("Freschi");
         art.setCategoria(freschi);
         art.setPrezzo(1.80);

@@ -18,10 +18,10 @@ public class FinestraPrincipale extends JPanel {
     private JList<String>            listaGrafica;
     private DefaultListModel<String> listaDatiModel;
     
-    private JButton                  btnApri;
-    private JButton                  btnCrea;
-    private JButton                  btnElimina;
-    private JButton                  btnModifica;
+    private JButton btnApri;
+    private JButton btnCrea;
+    private JButton btnElimina;
+    private JButton btnModifica;
 
     /**
      * Costruisce il pannello principale, preparando e posizionando i vari 
@@ -57,7 +57,7 @@ public class FinestraPrincipale extends JPanel {
     }
 
     /**
-     * Metodo di supporto privato che predispone la pulsantiera nella parte
+     * Metodo di supporto privato che predispone i pulsanti nella parte
      * inferiore della finestra, in modo che l'utente possa interagire con
      * le liste selezionate.
      */

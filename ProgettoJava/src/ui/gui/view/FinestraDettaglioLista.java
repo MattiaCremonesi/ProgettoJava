@@ -20,14 +20,14 @@ public class FinestraDettaglioLista extends JPanel {
     private JList<String>            listaArticoliGrafica;
     private DefaultListModel<String> modelArticoli;
 
-    private JButton                  btnCerca;
-    private JButton                  btnCalcolaTotale;
-    private JButton                  btnCestina;
-    private JButton                  btnRipristina;
-    private JButton                  btnSvuotaCestino;
-    private JButton                  btnAggiungi;
-    private JButton                  btnIndietro;
-    private JButton                  btnModifica;
+    private JButton btnCerca;
+    private JButton btnCalcolaTotale;
+    private JButton btnCestina;
+    private JButton btnRipristina;
+    private JButton btnSvuotaCestino;
+    private JButton btnAggiungi;
+    private JButton btnIndietro;
+    private JButton btnModifica;
 
     /**
      * Costruisce il pannello grafico associandolo al modello della lista 
@@ -129,7 +129,7 @@ public class FinestraDettaglioLista extends JPanel {
 
     /**
      * Restituisce l'indice dell'elemento che l'utente ha selezionato con il mouse
-     * nell'elenco grafico. Utile al controller per capire su quale articolo agire.
+     * nell'elenco grafico.
      * 
      * @return l'indice numerico della selezione, o -1 se nulla è selezionato
      */
@@ -215,8 +215,8 @@ public class FinestraDettaglioLista extends JPanel {
      * Metodo di supporto che assembla fisicamente la griglia dei campi di testo 
      * necessari per il modulo di un articolo.
      * 
-     * @param tNota   il campo di testo per la nota
-     * @param tCat    il campo di testo per la categoria
+     * @param tNotav il campo di testo per la nota
+     * @param tCat il campo di testo per la categoria
      * @param tPrezzo il campo di testo per il prezzo
      * @return il pannello pronto da inserire nella finestra di dialogo
      */

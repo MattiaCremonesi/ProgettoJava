@@ -303,8 +303,10 @@ public class GuiController implements ActionListener {
             Categoria categoria     = new Categoria(nomeCategoria);
             Articolo  nuovoArticolo = new Articolo(categoria, prezzo, nota);
 
+            GestioneListe.inserisciArticolo(nuovoArticolo);
             vistaDettaglio.getListaModello().aggiungiArticolo(nuovoArticolo);
             vistaDettaglio.aggiornaElencoArticoli();
+            
             JOptionPane.showMessageDialog(
                 vistaDettaglio, 
                 "Articolo aggiunto con successo.",
@@ -343,6 +345,7 @@ public class GuiController implements ActionListener {
             Articolo daRipristinare = ottieniArticoloPerIndice(indiceArticolo);
             if(daRipristinare != null) {
                 vistaDettaglio.getListaModello().ripristinaArticolo(daRipristinare);
+                GestioneListe.inserisciArticolo(daRipristinare);
                 vistaDettaglio.aggiornaElencoArticoli();
             }
         } else {
@@ -550,6 +553,11 @@ public class GuiController implements ActionListener {
      * @return true se è presente un omonimo, false altrimenti
      */
     private boolean isArticoloDuplicato(String nota, Articolo escludi) {
+        // FIX APPLICATO QUI: Se la nota è vuota, salta il controllo dei duplicati.
+        if (nota.trim().isEmpty()) {
+            return false;
+        }
+        
         for (Articolo a : vistaDettaglio.getListaModello()) {
             if (a != escludi && a.getNota().equalsIgnoreCase(nota)) {
                 return true;
@@ -570,11 +578,11 @@ public class GuiController implements ActionListener {
             return 0.0;
         }
         try {
-            // Sostituisco l'eventuale virgola italiana per evitare crash
             prezzoStr = prezzoStr.replace(",", ".");
             double prezzo = Double.parseDouble(prezzoStr);
             return prezzo < 0 ? 0.0 : prezzo;
-        } catch (NumberFormatException ex) {
+        } 
+        catch (NumberFormatException ex) {
             return 0.0;
         }
     }

@@ -44,7 +44,7 @@ public class Categoria {
 
     /**
      * Verifica l'uguaglianza tra due categorie basandosi sul nome.
-     * Questo metodo è vitale per garantire che le categorie siano 
+     * Questo metodo garantisce che le categorie siano 
      * correttamente condivise all'interno del sistema.
      * * @param obj l'oggetto da confrontare con questa categoria
      * @return true se le due categorie hanno lo stesso nome, false altrimenti
